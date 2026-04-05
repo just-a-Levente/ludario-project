@@ -3,6 +3,7 @@ export class BoardGame {
   private hidden: boolean
   private name: string
   private producer: string
+  private description: string
   private price: number
   private discount: number
   private numberOfCopies: number
@@ -17,6 +18,7 @@ export class BoardGame {
     hidden: boolean,
     name: string,
     producer: string,
+    description: string,
     price: number,
     discount: number,
     numberOfCopies: number,
@@ -30,6 +32,7 @@ export class BoardGame {
     this.hidden = hidden
     this.name = name
     this.producer = producer
+    this.description = description
     this.price = price
     this.discount = discount
     this.numberOfCopies = numberOfCopies
@@ -63,6 +66,13 @@ export class BoardGame {
   }
   public setProducer(newProducer: string) {
     this.producer = newProducer
+  }
+
+  public getDescription(): string {
+    return this.description
+  }
+  public setDescription(newDescription: string) {
+    this.description = newDescription
   }
 
   public getPrice(): number {
