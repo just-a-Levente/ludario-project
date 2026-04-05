@@ -1,9 +1,5 @@
 <script setup lang="ts"></script>
 
 <template>
-  <h1>Heyyyy</h1>
+  <span class="bg-orange-600 md:bg-orange-300">Heyy</span>
 </template>
-
-<style scoped>
-@import 'tailwindcss';
-</style>

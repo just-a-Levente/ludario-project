@@ -1,10 +1,10 @@
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
-  --neutral-color: #e7e7e7;
-  --blue-color: #485696;
-  --light-orange-color: #f9c784;
-  --orange-color: #fc7a1e;
-  --deep-orange-color: #f24c00;
+  --neutral-color: rgb(231, 231, 231); /* mauve-200 */
+  --blue-color: #485696; /* slate-500 */
+  --light-orange-color: #f9c784; /* orange-300 */
+  --orange-color: #fc7a1e; /* orange-500 */
+  --deep-orange-color: #f24c00; /* orange-600 */
 
   --black-text-color: #000000;
   --white-text-color: #ffffff;
