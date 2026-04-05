@@ -1,5 +1,7 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import NavBar from './components/NavBar.vue'
+</script>
 
 <template>
-  <span class="bg-orange-600 md:bg-orange-300">Heyy</span>
+  <NavBar />
 </template>
