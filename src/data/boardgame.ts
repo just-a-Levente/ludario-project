@@ -1,4 +1,4 @@
-class BoardGame {
+export class BoardGame {
   private id: number
   private hidden: boolean
   private name: string
@@ -10,6 +10,7 @@ class BoardGame {
   private maxNumberOfPlayers: number
   private photos: string[]
   private tags: string[]
+  private stars: number[]
 
   public constructor(
     id: number,
@@ -23,6 +24,7 @@ class BoardGame {
     maxNumberOfPlayers: number,
     photos: string[],
     tags: string[],
+    stars: number[],
   ) {
     this.id = id
     this.hidden = hidden
@@ -35,6 +37,7 @@ class BoardGame {
     this.maxNumberOfPlayers = maxNumberOfPlayers
     this.photos = photos
     this.tags = tags
+    this.stars = stars
   }
 
   public getID(): number {
@@ -109,5 +112,12 @@ class BoardGame {
   }
   public setTags(newTags: string[]) {
     this.tags = newTags
+  }
+
+  public getStars(): number[] {
+    return this.stars
+  }
+  public addStar(newStarRating: number) {
+    this.stars.push(newStarRating)
   }
 }
