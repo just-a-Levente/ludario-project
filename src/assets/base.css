@@ -1,6 +1,6 @@
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
-  --neutral-color: rgb(231, 231, 231); /* mauve-200 */
+  --neutral-color: #e7e7e7; /* mauve-200 */
   --blue-color: #485696; /* slate-500 */
   --light-orange-color: #f9c784; /* orange-300 */
   --orange-color: #fc7a1e; /* orange-500 */
