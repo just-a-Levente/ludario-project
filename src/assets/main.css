@@ -2,5 +2,5 @@
 @import 'tailwindcss';
 
 #app {
-  background-color: var(--color-mauve-200);
+  background-color: white;
 }

@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import { BoardGame } from '../data/boardgame.ts'
+import type { BoardGame } from '@/data/boardgame.ts'
 
 export const useBoardGamesStore = defineStore('boardgames', () => {
   /*   State   */
@@ -11,14 +11,19 @@ export const useBoardGamesStore = defineStore('boardgames', () => {
   const numberOfBoardGames = computed(() => boardgames.value.length)
 
   /*   Functions   */
+  function resetStore(): void {
+    lastID = 0
+    boardgames.value = []
+  }
+
   function getLastID(): number {
     const previousLastID = lastID
     lastID++
     return previousLastID
   }
 
-  function getBoardGameByID(gameID: number) {
-    return boardgames.value.filter((boardgame) => boardgame.getID() === gameID)[0]
+  function getBoardGameByID(gameID: number | undefined) {
+    return boardgames.value.find((boardgame) => boardgame.id === gameID)
   }
 
   function addBoardGame(newBoardGame: BoardGame) {
@@ -26,16 +31,12 @@ export const useBoardGamesStore = defineStore('boardgames', () => {
   }
 
   function updateBoardGame(updatedBoardGame: BoardGame) {
-    const index = boardgames.value.findIndex(
-      (boardgame) => boardgame.getID() === updatedBoardGame.getID(),
-    )
+    const index = boardgames.value.findIndex((boardgame) => boardgame.id === updatedBoardGame.id)
     if (index !== -1) boardgames.value[index] = updatedBoardGame
   }
 
   function deleteBoardGame(deletedBoardgame: BoardGame) {
-    boardgames.value = boardgames.value.filter(
-      (boardgame) => boardgame.getID() !== deletedBoardgame.getID(),
-    )
+    boardgames.value = boardgames.value.filter((boardgame) => boardgame.id !== deletedBoardgame.id)
   }
 
   return {
@@ -46,5 +47,6 @@ export const useBoardGamesStore = defineStore('boardgames', () => {
     addBoardGame,
     updateBoardGame,
     deleteBoardGame,
+    resetStore,
   }
 })

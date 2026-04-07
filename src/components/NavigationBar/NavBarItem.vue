@@ -1,3 +1,5 @@
+<script setup lang="ts"></script>
+
 <template>
   <div class="flex flex-row items-center gap-x-1.5">
     <span class="p-2 text-2xl">

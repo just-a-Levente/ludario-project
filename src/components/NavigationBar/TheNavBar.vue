@@ -9,7 +9,7 @@ import NavBarItem from './NavBarItem.vue'
     <NavBarItem>
       <template #navitem>Catalogue</template>
       <template #navicon>
-        <img src="/navbaricons/orange_hexagon_book.png" />
+        <img src="/navbaricons/blue_hexagon_book.png" />
       </template>
     </NavBarItem>
 
