@@ -73,26 +73,26 @@ function showAddModal() {
           class="rounded-lg bg-orange-300 px-2 py-0.5 hover:bg-orange-500 active:bg-orange-600"
           @click="getStartingPage"
         >
-          <<
+          &lt;&lt;
         </button>
         <button
           class="rounded-lg bg-orange-300 px-2 py-0.5 hover:bg-orange-500 active:bg-orange-600"
           @click="getPreviousPage"
         >
-          <
+          &lt;
         </button>
         <div>{{ page + 1 }} / {{ totalPages }}</div>
         <button
           class="rounded-lg bg-orange-300 px-2 py-0.5 hover:bg-orange-500 active:bg-orange-600"
           @click="getNextPage"
         >
-          >
+          &gt;
         </button>
         <button
           class="rounded-lg bg-orange-300 px-2 py-0.5 hover:bg-orange-500 active:bg-orange-600"
           @click="getEndingPage"
         >
-          >>
+          &gt;&gt;
         </button>
       </div>
     </div>

@@ -2,7 +2,9 @@
 import { ref } from 'vue'
 import { useAddBoardGameModal } from '@/composables/useAddBoardGameModal'
 import { createBoardGame } from '@/data/boardgame'
+import { useBoardGamesStore } from '@/stores/boardgames'
 
+const store = useBoardGamesStore()
 const { isOpen, close } = useAddBoardGameModal()
 
 const emptyBoardGame = ref(
@@ -18,7 +20,26 @@ function closeOnBackdropClick(e) {
   if (e.target === e.currentTarget) close()
 }
 
-function validateInputAndSend() {}
+function validateInputAndSend() {
+  const newID = store.getLastID()
+  const newBoardGame = createBoardGame({
+    id: newID,
+    hidden: emptyBoardGame.value.hidden,
+    name: emptyBoardGame.value.name,
+    producer: emptyBoardGame.value.producer,
+    description: emptyBoardGame.value.description,
+    price: emptyBoardGame.value.price,
+    numberOfCopies: emptyBoardGame.value.numberOfCopies,
+    minNumberOfPlayers: emptyBoardGame.value.minNumberOfPlayers,
+    maxNumberOfPlayers: emptyBoardGame.value.maxNumberOfPlayers,
+    thumbnailURL: emptyBoardGame.value.thumbnailURL,
+    tags: taglist.value.split(';'),
+    stars: emptyBoardGame.value.stars,
+  })
+
+  store.addBoardGame(newBoardGame)
+  close()
+}
 </script>
 
 <template>
@@ -107,11 +128,12 @@ function validateInputAndSend() {}
         />
         <img v-bind:src="emptyBoardGame.thumbnailURL" />
 
-        <input
-          type="submit"
-          value="Add board game"
+        <button
+          @click="validateInputAndSend"
           class="rounded-lg bg-orange-300 px-2 py-0.5 hover:bg-orange-500 active:bg-orange-600"
-        />
+        >
+          Add board game
+        </button>
       </div>
     </div>
   </Teleport>
