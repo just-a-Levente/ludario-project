@@ -29,7 +29,3 @@ export function createBoardGame(data: Partial<BoardGame> = {}): BoardGame {
     stars: data.stars ?? [],
   }
 }
-
-/*export function createBoardGameEfficient(game: BoardGame): BoardGame {
-  return game
-}*/

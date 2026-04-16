@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
-import { useBoardGamesStore } from '@/stores/boardgames.ts'
+import { useBoardGamesStore } from '@/stores/boardgamestore'
 import { createBoardGame } from '@/data/boardgame.ts'
 import type { BoardGame } from '@/data/boardgame.ts'
 

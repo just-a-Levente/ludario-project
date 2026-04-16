@@ -1,50 +1,42 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useBoardGamesStore } from '@/stores/boardgames.ts'
+import { ref, computed } from 'vue'
+import { useBoardGamesStore } from '@/stores/boardgamestore'
 import BoardGameListItem from '@/components/CatalogueView/BoardGameListItem.vue'
-import AddBoardGameModal from '../AddBoardGame/AddBoardGameModal.vue'
+import AddBoardGameModal from '../BoardGameOpWindows/AddBoardGameModal.vue'
 import { useAddBoardGameModal } from '@/composables/useAddBoardGameModal'
+import ToggleSwitch from 'primevue/toggleswitch'
 
 const store = useBoardGamesStore()
 const { open } = useAddBoardGameModal()
 
+const visualViewActive = ref(false)
+
 const visibleBoardGamesOnPage = 7
 
 const page = ref(0)
-const totalPages = Math.ceil(store.boardgames.length / visibleBoardGamesOnPage)
+const totalPages = computed(() => Math.ceil(store.boardgames.length / visibleBoardGamesOnPage))
 
-const visibleBoardGames = ref(store.boardgames.slice(0, visibleBoardGamesOnPage))
+const visibleBoardGames = computed(() => {
+  const startingBoardGame = page.value * visibleBoardGamesOnPage
+  return store.boardgames.slice(startingBoardGame, startingBoardGame + visibleBoardGamesOnPage)
+})
 
 function getStartingPage() {
   page.value = 0
-  visibleBoardGames.value = store.boardgames.slice(0, visibleBoardGamesOnPage)
 }
 
 function getEndingPage() {
-  page.value = totalPages - 1
-  visibleBoardGames.value = store.boardgames.slice((totalPages - 1) * visibleBoardGamesOnPage)
+  page.value = totalPages.value - 1
 }
 
 function getPreviousPage() {
-  if (page.value == 0) page.value = totalPages - 1
+  if (page.value == 0) page.value = totalPages.value - 1
   else page.value--
-
-  const startingBoardGame = page.value * visibleBoardGamesOnPage
-  visibleBoardGames.value = store.boardgames.slice(
-    startingBoardGame,
-    startingBoardGame + visibleBoardGamesOnPage,
-  )
 }
 
 function getNextPage() {
-  if (page.value == totalPages - 1) page.value = 0
+  if (page.value == totalPages.value - 1) page.value = 0
   else page.value++
-
-  const startingBoardGame = page.value * visibleBoardGamesOnPage
-  visibleBoardGames.value = store.boardgames.slice(
-    startingBoardGame,
-    startingBoardGame + visibleBoardGamesOnPage,
-  )
 }
 
 function showAddModal() {
@@ -53,13 +45,13 @@ function showAddModal() {
 </script>
 
 <template>
-  <div class="flex min-h-screen flex-col items-center justify-between p-12">
-    <div class="flex flex-col gap-y-4">
+  <div class="flex min-h-screen w-5/6 flex-col items-start justify-between p-12">
+    <div class="flex w-11/12 flex-col gap-y-4">
       <div v-for="boardgame in visibleBoardGames" :key="boardgame.id">
         <BoardGameListItem :boardgame="boardgame" />
       </div>
     </div>
-    <div class="items-between flex flex-row gap-x-24">
+    <div class="flex w-11/12 flex-row justify-evenly">
       <div>
         <button
           class="rounded-lg bg-slate-500 px-2 py-0.5 text-2xl text-slate-200 hover:bg-slate-600 active:bg-slate-800"
@@ -95,8 +87,24 @@ function showAddModal() {
           &gt;&gt;
         </button>
       </div>
+      <div class="flex flex-row items-center gap-x-3">
+        <div class="primevue-scope">
+          <div>Tabular view</div>
+          <ToggleSwitch v-model="visualViewActive" />
+          <div>Visual view</div>
+        </div>
+      </div>
     </div>
   </div>
 
   <AddBoardGameModal />
 </template>
+
+<style lang="css" scoped>
+.primevue-scope {
+  all: revert;
+  display: flex;
+  flex-direction: row;
+  column-gap: calc(var(--spacing) * 3);
+}
+</style>
