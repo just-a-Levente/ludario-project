@@ -1,8 +1,9 @@
 <script setup lang="ts">
-// import type { BoardGame } from '@/data/boardgame'
 import { createBoardGame } from '@/data/boardgame'
 import DetailBoardGameModal from '../BoardGameOpWindows/DetailBoardGameModal.vue'
+import DeleteBoardGameModal from '../BoardGameOpWindows/DeleteBoardGameModal.vue'
 import { useDetailBoardGameModal } from '@/composables/useDetailBoardGameModal'
+import { useDeleteBoardGameModal } from '@/composables/useDeleteBoardGameModal'
 
 const props = defineProps({
   boardgame: createBoardGame,
@@ -10,6 +11,7 @@ const props = defineProps({
 
 const currBoardgame = props.boardgame
 const { detailOpen, changeDetailedBoardgame } = useDetailBoardGameModal()
+const { deleteOpen, changeBoardgameToBeDeleted } = useDeleteBoardGameModal()
 
 function openDetailModal() {
   if (currBoardgame === undefined) return
@@ -20,6 +22,9 @@ function openDetailModal() {
 
 function openDeleteModal() {
   if (currBoardgame === undefined) return
+
+  changeBoardgameToBeDeleted(currBoardgame)
+  deleteOpen()
 }
 </script>
 
@@ -37,10 +42,10 @@ function openDeleteModal() {
       <button @click="openDetailModal">
         <img src="/src/assets/icons/details_icon.png" alt="Details" class="w-10" />
       </button>
-      <button @click="openDeleteModal">
+      <button>
         <img src="/src/assets/icons/edit_icon.png" alt="Edit" class="w-10" />
       </button>
-      <button>
+      <button @click="openDeleteModal">
         <img src="/src/assets/icons/delete_icon.png" alt="Delete" class="w-10" />
       </button>
     </div>
