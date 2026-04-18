@@ -1,14 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useDetailBoardGameModal } from '@/composables/useDetailBoardGameModal'
 
-const { isDetailOpen, detailedBoardgame, detailClose } = useDetailBoardGameModal()
-
-const tagList = ref('Tags: ')
-detailedBoardgame.value.tags.forEach((element: string) => {
-  tagList.value += element + ', '
-})
-tagList.value = tagList.value.slice(0, tagList.value.length - 2)
+const { isDetailOpen, detailedBoardgame, tagList, detailClose } = useDetailBoardGameModal()
 
 function closeOnBackdropClick(e: MouseEvent) {
   if (e.target === e.currentTarget) detailClose()
@@ -37,7 +30,7 @@ function closeOnBackdropClick(e: MouseEvent) {
                 {{ detailedBoardgame?.minNumberOfPlayers }} -
                 {{ detailedBoardgame?.maxNumberOfPlayers }} players
               </div>
-              <div>{{ tagList }}</div>
+              <div>Tags: {{ tagList }}</div>
             </div>
           </div>
           <div>{{ detailedBoardgame?.description }}</div>
