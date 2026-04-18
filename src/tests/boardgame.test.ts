@@ -1,6 +1,6 @@
 import { expect, describe, it, beforeEach } from 'vitest'
 import type { BoardGame } from '../data/boardgame.ts'
-import { createBoardGame } from '../data/boardgame.ts'
+import { copyBoardGame, createBoardGame } from '../data/boardgame.ts'
 
 let testBoardGame: BoardGame
 
@@ -15,7 +15,7 @@ beforeEach(() => {
     numberOfCopies: 5,
     minNumberOfPlayers: 2,
     maxNumberOfPlayers: 4,
-    photos: [],
+    thumbnailURL: '',
     tags: [],
     stars: [],
   })
@@ -65,7 +65,7 @@ describe('testing boardgame model (type-based)', () => {
     })
 
     it('photos', () => {
-      expect(testBoardGame.photos).toStrictEqual([])
+      expect(testBoardGame.thumbnailURL).toStrictEqual('')
     })
 
     it('tags', () => {
@@ -121,8 +121,8 @@ describe('testing boardgame model (type-based)', () => {
     it('set photos', () => {
       const placeholderPath = 'public/images/placeholder.png'
 
-      testBoardGame.photos = [placeholderPath]
-      expect(testBoardGame.photos).toStrictEqual([placeholderPath])
+      testBoardGame.thumbnailURL = placeholderPath
+      expect(testBoardGame.thumbnailURL).toStrictEqual(placeholderPath)
     })
 
     it('set tags', () => {
@@ -133,6 +133,16 @@ describe('testing boardgame model (type-based)', () => {
     it('add star', () => {
       testBoardGame.stars.push(6)
       expect(testBoardGame.stars).toStrictEqual([6])
+    })
+  })
+
+  describe('copy', () => {
+    it('copy board game', () => {
+      const testCopyBoardGame = copyBoardGame(testBoardGame)
+      testCopyBoardGame.name = 'TestCopyBoardGame'
+
+      expect(testBoardGame.name).toBe('TestBoardGame')
+      expect(testCopyBoardGame.name).toBe('TestCopyBoardGame')
     })
   })
 })

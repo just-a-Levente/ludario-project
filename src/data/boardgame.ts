@@ -29,3 +29,20 @@ export function createBoardGame(data: Partial<BoardGame> = {}): BoardGame {
     stars: data.stars ?? [],
   }
 }
+
+export function copyBoardGame(data: BoardGame): BoardGame {
+  return {
+    id: data.id,
+    hidden: data.hidden,
+    name: data.name,
+    producer: data.producer,
+    description: data.description,
+    price: data.price,
+    numberOfCopies: data.numberOfCopies,
+    minNumberOfPlayers: data.minNumberOfPlayers,
+    maxNumberOfPlayers: data.maxNumberOfPlayers,
+    thumbnailURL: data.thumbnailURL,
+    tags: data.tags,
+    stars: data.stars,
+  }
+}

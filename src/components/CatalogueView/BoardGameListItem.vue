@@ -2,38 +2,47 @@
 import { createBoardGame } from '@/data/boardgame'
 import DetailBoardGameModal from '../BoardGameOpWindows/DetailBoardGameModal.vue'
 import DeleteBoardGameModal from '../BoardGameOpWindows/DeleteBoardGameModal.vue'
+import EditBoardGameModal from '../BoardGameOpWindows/EditBoardGameModal.vue'
 import { useDetailBoardGameModal } from '@/composables/useDetailBoardGameModal'
 import { useDeleteBoardGameModal } from '@/composables/useDeleteBoardGameModal'
+import { useEditBoardGameModal } from '@/composables/useEditBoardGameModal'
 
 const props = defineProps({
   boardgame: createBoardGame,
 })
 
-const currBoardgame = props.boardgame
 const { detailOpen, changeDetailedBoardgame } = useDetailBoardGameModal()
 const { deleteOpen, changeBoardgameToBeDeleted } = useDeleteBoardGameModal()
+const { editOpen, changeBoardGameToBeEdited } = useEditBoardGameModal()
 
 function openDetailModal() {
-  if (currBoardgame === undefined) return
+  if (props.boardgame === undefined) return
 
-  changeDetailedBoardgame(currBoardgame)
+  changeDetailedBoardgame(props.boardgame)
   detailOpen()
 }
 
 function openDeleteModal() {
-  if (currBoardgame === undefined) return
+  if (props.boardgame === undefined) return
 
-  changeBoardgameToBeDeleted(currBoardgame)
+  changeBoardgameToBeDeleted(props.boardgame)
   deleteOpen()
+}
+
+function openEditModal() {
+  if (props.boardgame === undefined) return
+
+  changeBoardGameToBeEdited(props.boardgame)
+  editOpen()
 }
 </script>
 
 <template>
   <div class="flex flex-row items-center justify-between bg-mauve-200 p-4 text-2xl">
     <div class="overflow-hidden text-ellipsis whitespace-nowrap">
-      {{ currBoardgame?.name }} - {{ currBoardgame?.producer }} -
-      {{ currBoardgame?.numberOfCopies }} copies - {{ currBoardgame?.minNumberOfPlayers }}-{{
-        currBoardgame?.maxNumberOfPlayers
+      {{ props.boardgame?.name }} - {{ props.boardgame?.producer }} -
+      {{ props.boardgame?.numberOfCopies }} copies - {{ props.boardgame?.minNumberOfPlayers }}-{{
+        props.boardgame?.maxNumberOfPlayers
       }}
       players
     </div>
@@ -42,7 +51,7 @@ function openDeleteModal() {
       <button @click="openDetailModal">
         <img src="/src/assets/icons/details_icon.png" alt="Details" class="w-10" />
       </button>
-      <button>
+      <button @click="openEditModal">
         <img src="/src/assets/icons/edit_icon.png" alt="Edit" class="w-10" />
       </button>
       <button @click="openDeleteModal">
@@ -52,5 +61,6 @@ function openDeleteModal() {
 
     <DetailBoardGameModal />
     <DeleteBoardGameModal />
+    <EditBoardGameModal />
   </div>
 </template>
