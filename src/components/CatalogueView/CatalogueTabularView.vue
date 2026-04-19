@@ -5,6 +5,7 @@ import BoardGameListItem from '@/components/CatalogueView/BoardGameListItem.vue'
 import AddBoardGameModal from '../BoardGameOpWindows/AddBoardGameModal.vue'
 import { useAddBoardGameModal } from '@/composables/useAddBoardGameModal'
 import ToggleSwitch from 'primevue/toggleswitch'
+import BoardGameCardItem from './BoardGameCardItem.vue'
 
 const store = useBoardGamesStore()
 const { open } = useAddBoardGameModal()
@@ -12,11 +13,25 @@ const { open } = useAddBoardGameModal()
 const visualViewActive = ref(false)
 
 const visibleBoardGamesOnPage = 7
+const visibleBoardGameCardsOnPage = 10
 
 const page = ref(0)
-const totalPages = computed(() => Math.ceil(store.boardgames.length / visibleBoardGamesOnPage))
+const totalPages = computed(() => {
+  if (visualViewActive.value)
+    return Math.ceil(store.boardgames.length / visibleBoardGameCardsOnPage)
+
+  return Math.ceil(store.boardgames.length / visibleBoardGamesOnPage)
+})
 
 const visibleBoardGames = computed(() => {
+  if (visualViewActive.value) {
+    const startingBoardGame = page.value * visibleBoardGameCardsOnPage
+    return store.boardgames.slice(
+      startingBoardGame,
+      startingBoardGame + visibleBoardGameCardsOnPage,
+    )
+  }
+
   const startingBoardGame = page.value * visibleBoardGamesOnPage
   return store.boardgames.slice(startingBoardGame, startingBoardGame + visibleBoardGamesOnPage)
 })
@@ -45,13 +60,18 @@ function showAddModal() {
 </script>
 
 <template>
-  <div class="flex min-h-screen w-5/6 flex-col items-start justify-between p-12">
-    <div class="flex w-11/12 flex-col gap-y-4 overflow-y-scroll">
+  <div class="flex min-h-screen flex-col items-center justify-between p-12">
+    <div v-if="visualViewActive === false" class="flex w-11/12 flex-col gap-y-4 overflow-y-scroll">
       <div v-for="boardgame in visibleBoardGames" :key="boardgame.id">
         <BoardGameListItem :boardgame="boardgame" />
       </div>
     </div>
-    <div class="flex w-11/12 flex-row justify-evenly pt-2">
+    <div v-if="visualViewActive === true" class="flex w-11/12 flex-row flex-wrap gap-5">
+      <div v-for="boardgame in visibleBoardGames" :key="boardgame.id">
+        <BoardGameCardItem :boardgame="boardgame" />
+      </div>
+    </div>
+    <div class="flex w-11/12 flex-row justify-evenly pt-6">
       <div>
         <button
           class="rounded-lg bg-slate-500 px-2 py-0.5 text-2xl text-slate-200 hover:bg-slate-600 active:bg-slate-800"
