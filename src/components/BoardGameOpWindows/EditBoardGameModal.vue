@@ -80,7 +80,7 @@ function editSelectedBoardgame() {
     <div
       v-show="isEditOpen"
       @click="closeOnBackdropClick"
-      class="justify-cneter fixed inset-0 z-1000 flex items-center justify-center backdrop-brightness-50"
+      class="justify-cneter fixed inset-0 z-1000 flex items-center justify-center backdrop-brightness-75"
     >
       <div
         class="flex h-3/4 w-2/5 flex-col gap-y-3 overflow-y-scroll rounded-lg border-4 border-mauve-500 bg-slate-200 p-3 text-lg"

@@ -1,6 +1,7 @@
 import CatalogueTabularView from '@/components/CatalogueView/CatalogueTabularView.vue'
 import DashboardView from '@/components/NavigationBar/DashboardView.vue'
 import LoginView from '@/components/UserLogin/LoginView.vue'
+import BoardGameDetailView from '@/components/BoardGameOpWindows/BoardGameDetailView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -17,6 +18,10 @@ const router = createRouter({
         {
           path: 'boardgames',
           component: CatalogueTabularView,
+        },
+        {
+          path: 'boardgames/:id',
+          component: BoardGameDetailView,
         },
       ],
     },

@@ -3,7 +3,7 @@ import NavBarItem from './NavBarItem.vue'
 </script>
 
 <template>
-  <div class="flex w-1/6 flex-col items-end gap-y-2 bg-orange-300 px-4 py-6">
+  <div class="mr-6 flex w-1/6 flex-col items-end gap-y-2 bg-orange-300 px-4 py-6">
     <img src="/logo_with_title.png" alt="Ludario logo" class="w-56 pb-6" />
 
     <NavBarItem>

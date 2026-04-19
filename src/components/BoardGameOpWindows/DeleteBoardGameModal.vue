@@ -19,7 +19,7 @@ function deleteSelectedBoardgame() {
     <div
       v-show="isDeleteOpen"
       @click="closeOnBackdropClick"
-      class="fixed inset-0 z-1000 flex items-center justify-center backdrop-brightness-50"
+      class="fixed inset-0 z-1000 flex items-center justify-center backdrop-brightness-75"
     >
       <div
         class="flex w-1/5 flex-col items-center gap-y-6 overflow-y-scroll rounded-lg border-4 border-mauve-500 bg-slate-200 p-6 text-lg"

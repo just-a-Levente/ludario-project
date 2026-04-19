@@ -60,6 +60,7 @@ async function validateLoginInput() {
           <label class="text-orange-600" for="email">E-mail:</label>
           <input
             class="rounded-lg bg-white p-2"
+            data-testid="inputEmail"
             type="text"
             name="email"
             v-model="formInputForUser.emailInput"
@@ -68,6 +69,7 @@ async function validateLoginInput() {
           <label class="text-orange-600" for="password">Password:</label>
           <input
             class="rounded-lg bg-white p-2"
+            data-testid="inputPassword"
             type="password"
             name="password"
             v-model="formInputForUser.passwordInput"
@@ -85,6 +87,7 @@ async function validateLoginInput() {
           <div>
             <button
               @click.prevent="validateLoginInput"
+              data-testid="loginButton"
               class="rounded-xl rounded-br-3xl bg-orange-600 p-3 text-mauve-200"
             >
               Enter

@@ -1,9 +1,8 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
 import { createBoardGame } from '@/data/boardgame'
-import DetailBoardGameModal from '../BoardGameOpWindows/DetailBoardGameModal.vue'
 import DeleteBoardGameModal from '../BoardGameOpWindows/DeleteBoardGameModal.vue'
 import EditBoardGameModal from '../BoardGameOpWindows/EditBoardGameModal.vue'
-import { useDetailBoardGameModal } from '@/composables/useDetailBoardGameModal'
 import { useDeleteBoardGameModal } from '@/composables/useDeleteBoardGameModal'
 import { useEditBoardGameModal } from '@/composables/useEditBoardGameModal'
 
@@ -11,15 +10,14 @@ const props = defineProps({
   boardgame: createBoardGame,
 })
 
-const { detailOpen, changeDetailedBoardgame } = useDetailBoardGameModal()
 const { deleteOpen, changeBoardgameToBeDeleted } = useDeleteBoardGameModal()
 const { editOpen, changeBoardGameToBeEdited } = useEditBoardGameModal()
+const router = useRouter()
 
 function openDetailModal() {
   if (props.boardgame === undefined) return
 
-  changeDetailedBoardgame(props.boardgame)
-  detailOpen()
+  router.push(`/dashboard/boardgames/${props.boardgame.id}`)
 }
 
 function openDeleteModal() {
@@ -59,7 +57,6 @@ function openEditModal() {
       </button>
     </div>
 
-    <DetailBoardGameModal />
     <DeleteBoardGameModal />
     <EditBoardGameModal />
   </div>
