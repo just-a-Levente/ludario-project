@@ -22,6 +22,7 @@ function deleteSelectedBoardgame() {
       class="fixed inset-0 z-1000 flex items-center justify-center backdrop-brightness-75"
     >
       <div
+        data-testid="deleteModal"
         class="flex w-1/5 flex-col items-center gap-y-6 overflow-y-scroll rounded-lg border-4 border-mauve-500 bg-slate-200 p-6 text-lg"
       >
         <div class="w-full">Do you want to delete {{ boardgameToBeDeleted.name }}?</div>
@@ -33,6 +34,7 @@ function deleteSelectedBoardgame() {
             No
           </button>
           <button
+            data-testid="confirmDeleteButton"
             @click.prevent="deleteSelectedBoardgame"
             class="rounded-xl bg-orange-600 px-3 py-2 text-mauve-200"
           >

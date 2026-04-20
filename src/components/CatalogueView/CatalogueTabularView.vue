@@ -62,7 +62,7 @@ function showAddModal() {
 <template>
   <div class="flex min-h-screen flex-col items-center justify-between p-12">
     <div v-if="visualViewActive === false" class="flex w-11/12 flex-col gap-y-4 overflow-y-scroll">
-      <div v-for="boardgame in visibleBoardGames" :key="boardgame.id">
+      <div class="boardgameListItem" v-for="boardgame in visibleBoardGames" :key="boardgame.id">
         <BoardGameListItem :boardgame="boardgame" />
       </div>
     </div>
@@ -74,6 +74,7 @@ function showAddModal() {
     <div class="flex w-11/12 flex-row justify-evenly pt-6">
       <div>
         <button
+          id="addButton"
           class="rounded-lg bg-slate-500 px-2 py-0.5 text-2xl text-slate-200 hover:bg-slate-600 active:bg-slate-800"
           @click="showAddModal"
         >

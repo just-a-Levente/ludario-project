@@ -61,7 +61,8 @@ function validateInput() {
   if (emptyBoardGame.value.name == '') errors.value.name = 'Name required'
   if (emptyBoardGame.value.producer == '') errors.value.producer = 'Producer required'
   if (emptyBoardGame.value.description == '') errors.value.description = 'Description required'
-  if (emptyBoardGame.value.price == 0) errors.value.price = 'Price required'
+  if (isNaN(emptyBoardGame.value.price) || emptyBoardGame.value.price <= 0)
+    errors.value.price = 'Price required'
   if (emptyBoardGame.value.numberOfCopies <= 0)
     errors.value.numberOfCopies = 'Must be positive integer'
   if (emptyBoardGame.value.minNumberOfPlayers <= 0)
@@ -125,49 +126,63 @@ function sendNewBoardGame() {
       >
         <span>Name:</span>
         <input
+          id="addNameField"
           type="text"
           v-model="emptyBoardGame.name"
           class="rounded-lg bg-white p-2"
           placeholder="Enter name"
         />
-        <span v-show="errors.name" class="text-sm text-orange-600">{{ errors.name }}</span>
+        <span id="addNameError" v-show="errors.name" class="text-sm text-orange-600">{{
+          errors.name
+        }}</span>
 
         <span>Producer:</span>
         <input
+          id="addProducerField"
           type="text"
           v-model="emptyBoardGame.producer"
           class="rounded-lg bg-white p-2"
           placeholder="Enter producer"
         />
-        <span v-show="errors.producer" class="text-sm text-orange-600">{{ errors.producer }}</span>
+        <span id="addProducerError" v-show="errors.producer" class="text-sm text-orange-600">{{
+          errors.producer
+        }}</span>
 
         <span>Description:</span>
         <textarea
+          id="addDescriptionField"
           v-model="emptyBoardGame.description"
           class="rounded-lg bg-white p-2"
           placeholder="Enter description"
         />
-        <span v-show="errors.description" class="text-sm text-orange-600">{{
-          errors.description
-        }}</span>
+        <span
+          id="addDescriptionError"
+          v-show="errors.description"
+          class="text-sm text-orange-600"
+          >{{ errors.description }}</span
+        >
 
         <span>Price:</span>
         <input
+          id="addPriceField"
           type="text"
           v-model="emptyBoardGame.price"
           class="rounded-lg bg-white p-2"
           placeholder="Enter price"
         />
-        <span v-show="errors.price" class="text-sm text-orange-600">{{ errors.price }}</span>
+        <span id="addPriceError" v-show="errors.price" class="text-sm text-orange-600">{{
+          errors.price
+        }}</span>
 
         <span>Number of copies:</span>
         <input
+          id="addCopiesField"
           type="number"
           v-model="emptyBoardGame.numberOfCopies"
           class="rounded-lg bg-white p-2"
           placeholder="Enter number of copies"
         />
-        <span v-show="errors.numberOfCopies" class="text-sm text-orange-600">{{
+        <span id="addCopiesError" v-show="errors.numberOfCopies" class="text-sm text-orange-600">{{
           errors.numberOfCopies
         }}</span>
 
@@ -177,53 +192,69 @@ function sendNewBoardGame() {
             <div class="flex flex-col items-center">
               <span>Min</span>
               <input
+                id="addMinPlayerField"
                 type="number"
                 v-model="emptyBoardGame.minNumberOfPlayers"
                 class="w-auto rounded-lg bg-white"
               />
-              <span v-show="errors.minNumberOfPlayers" class="text-sm text-orange-600">{{
-                errors.minNumberOfPlayers
-              }}</span>
+              <span
+                id="addMinPlayerError"
+                v-show="errors.minNumberOfPlayers"
+                class="text-sm text-orange-600"
+                >{{ errors.minNumberOfPlayers }}</span
+              >
             </div>
             <div class="flex flex-col items-center">
               <span>Max</span>
               <input
+                id="addMaxPlayerField"
                 type="number"
                 v-model="emptyBoardGame.maxNumberOfPlayers"
                 class="w-auto rounded-lg bg-white"
               />
-              <span v-show="errors.maxNumberOfPlayers" class="text-sm text-orange-600">{{
-                errors.maxNumberOfPlayers
-              }}</span>
+              <span
+                id="addMaxPlayerError"
+                v-show="errors.maxNumberOfPlayers"
+                class="text-sm text-orange-600"
+                >{{ errors.maxNumberOfPlayers }}</span
+              >
             </div>
           </div>
-          <span v-show="errors.playerCount" class="text-sm text-orange-600">{{
-            errors.playerCount
-          }}</span>
+          <span
+            id="addPlayerCountError"
+            v-show="errors.playerCount"
+            class="text-sm text-orange-600"
+            >{{ errors.playerCount }}</span
+          >
         </div>
 
         <span>Tags:</span>
         <input
+          id="addTagsField"
           type="text"
           v-model="taglist"
           class="rounded-lg bg-white p-2"
           placeholder="Enter tags (separated by ;)"
         />
-        <span v-show="errors.tags" class="text-sm text-orange-600">{{ errors.tags }}</span>
+        <span id="addTagsError" v-show="errors.tags" class="text-sm text-orange-600">{{
+          errors.tags
+        }}</span>
 
         <span>Thumbnail URL:</span>
         <input
+          id="addThumbnailField"
           type="text"
           v-model="emptyBoardGame.thumbnailURL"
           class="rounded-lg bg-white p-2"
           placeholder="Enter image URL"
         />
-        <span v-show="errors.thumbnailURL" class="text-sm text-orange-600">{{
+        <span id="addThumbnailError" v-show="errors.thumbnailURL" class="text-sm text-orange-600">{{
           errors.thumbnailURL
         }}</span>
         <img v-bind:src="emptyBoardGame.thumbnailURL" />
 
         <button
+          id="addNewBoardgameButton"
           @click="sendNewBoardGame"
           class="rounded-lg bg-orange-300 px-2 py-0.5 hover:bg-orange-500 active:bg-orange-600"
         >

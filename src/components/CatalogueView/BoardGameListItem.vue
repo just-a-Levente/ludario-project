@@ -36,7 +36,10 @@ function openEditModal() {
 </script>
 
 <template>
-  <div class="flex flex-row items-center justify-between bg-mauve-200 p-4 text-2xl">
+  <div
+    data-testid="boardgame-item"
+    class="flex flex-row items-center justify-between bg-mauve-200 p-4 text-2xl"
+  >
     <div class="overflow-hidden text-ellipsis whitespace-nowrap">
       {{ props.boardgame?.name }} - {{ props.boardgame?.producer }} -
       {{ props.boardgame?.numberOfCopies }} copies - {{ props.boardgame?.minNumberOfPlayers }}-{{
@@ -46,13 +49,13 @@ function openEditModal() {
     </div>
 
     <div class="flex shrink-0 flex-row items-center gap-x-2">
-      <button @click="openDetailModal">
+      <button data-testid="detail-button" @click="openDetailModal">
         <img src="/src/assets/icons/details_icon.png" alt="Details" class="w-10" />
       </button>
-      <button @click="openEditModal">
+      <button data-testid="edit-button" @click="openEditModal">
         <img src="/src/assets/icons/edit_icon.png" alt="Edit" class="w-10" />
       </button>
-      <button @click="openDeleteModal">
+      <button data-testid="delete-button" @click="openDeleteModal">
         <img src="/src/assets/icons/delete_icon.png" alt="Delete" class="w-10" />
       </button>
     </div>
