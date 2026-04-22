@@ -49,7 +49,9 @@ function openEditModal() {
 </script>
 
 <template>
-  <div class="flex h-72 w-46 flex-1 flex-col items-center justify-between bg-mauve-200 p-4 text-xl">
+  <div
+    class="flex h-72 w-56 flex-1 flex-col items-center justify-between bg-mauve-200 p-4 text-xl sm:w-46"
+  >
     <img :src="props.boardgame?.thumbnailURL" alt="thumbnail image" class="w-36 object-cover" />
 
     <div class="w-full min-w-0 truncate text-center">

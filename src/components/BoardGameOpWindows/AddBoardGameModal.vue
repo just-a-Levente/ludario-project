@@ -119,10 +119,10 @@ function sendNewBoardGame() {
     <div
       v-show="isOpen"
       @click="closeOnBackdropClick"
-      class="fixed inset-0 z-1000 flex items-center justify-center backdrop-brightness-75"
+      class="fixed inset-0 z-1000 flex items-center justify-center backdrop-brightness-30"
     >
       <div
-        class="flex h-3/4 w-2/5 flex-col gap-y-3 overflow-y-scroll rounded-lg border-4 border-mauve-500 bg-slate-200 p-3 text-lg"
+        class="flex aspect-1/2 h-128 flex-col gap-y-3 overflow-y-scroll rounded-lg border-4 border-mauve-500 bg-slate-200 p-3 text-lg sm:aspect-4/5 lg:aspect-5/4"
       >
         <span>Name:</span>
         <input
@@ -188,14 +188,14 @@ function sendNewBoardGame() {
 
         <span>Number of players:</span>
         <div class="flex flex-col items-center gap-y-2">
-          <div class="flex flex-row justify-evenly">
+          <div class="flex flex-col justify-evenly lg:flex-row">
             <div class="flex flex-col items-center">
               <span>Min</span>
               <input
                 id="addMinPlayerField"
                 type="number"
                 v-model="emptyBoardGame.minNumberOfPlayers"
-                class="w-auto rounded-lg bg-white"
+                class="w-2/3 rounded-lg bg-white"
               />
               <span
                 id="addMinPlayerError"
@@ -210,7 +210,7 @@ function sendNewBoardGame() {
                 id="addMaxPlayerField"
                 type="number"
                 v-model="emptyBoardGame.maxNumberOfPlayers"
-                class="w-auto rounded-lg bg-white"
+                class="w-2/3 rounded-lg bg-white"
               />
               <span
                 id="addMaxPlayerError"

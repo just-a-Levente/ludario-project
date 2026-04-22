@@ -9,6 +9,7 @@ const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))
 
 const chartOptions = {
   responsive: true,
+  maintainAspectRatio: false,
   animation: {
     duration: 800,
     easing: 'easeOutQuart',
@@ -16,6 +17,9 @@ const chartOptions = {
   scales: {
     x: {
       beginAtZero: true,
+      ticks: {
+        maxRotation: 90,
+      },
     },
   },
 }
@@ -144,11 +148,13 @@ async function addFakeBoardgames() {
 </script>
 
 <template>
-  <div class="flex flex-col gap-y-4 p-8">
-    <div class="text-3xl">Top 5 producers by number of copies</div>
-    <Chart class="w-2/3" type="bar" :data="producerChartData" :options="chartOptions" />
-    <div class="text-3xl">Top 5 tags by number of copies</div>
-    <Chart class="w-2/3" type="bar" :data="tagsChartData" :options="chartOptions" />
+  <div
+    class="flex aspect-4/3 w-full flex-col gap-y-4 p-8 sm:aspect-16/10 md:aspect-video md:w-3/4 lg:aspect-2/1 lg:w-2/3"
+  >
+    <div class="text-2xl md:text-3xl">Top 5 producers by number of copies</div>
+    <Chart class="h-full w-full" type="bar" :data="producerChartData" :options="chartOptions" />
+    <div class="text-2xl md:text-3xl">Top 5 tags by number of copies</div>
+    <Chart class="h-full w-full" type="bar" :data="tagsChartData" :options="chartOptions" />
     <button
       class="rounded-lg bg-slate-500 px-2 py-0.5 text-2xl text-slate-200 hover:bg-slate-600 active:bg-slate-800"
       @click="addFakeBoardgames"

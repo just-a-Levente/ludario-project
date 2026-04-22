@@ -22,45 +22,49 @@ function clickExplore() {}
 </script>
 
 <template>
-  <div class="mr-6 flex h-dvh flex-col items-end gap-y-2 bg-orange-300 py-6">
-    <img src="/logo_with_title.png" alt="Ludario logo" class="w-56 pb-6" />
+  <div
+    class="flex h-auto flex-col items-center gap-y-2 bg-orange-300 p-3 sm:flex-row sm:justify-between sm:gap-x-4 sm:p-4 lg:mr-6 lg:h-dvh lg:flex-col lg:items-end lg:justify-normal lg:gap-y-3 lg:px-4 lg:py-6"
+  >
+    <img src="/logo_with_title.png" alt="Ludario logo" class="w-40 sm:w-48 lg:w-56 lg:pb-6" />
 
-    <div @click="clickCatalogue" class="flex flex-row items-center gap-x-1.5">
-      <span class="p-2 text-2xl">Catalogue</span>
-      <div class="w-18">
-        <img
-          :src="
-            catalogueButtonActive === true
-              ? '/src/assets/navbaricons/blue_hexagon_book.png'
-              : '/src/assets/navbaricons/orange_hexagon_book.png'
-          "
-        />
+    <div class="flex flex-col items-end sm:flex-row lg:flex-col lg:items-end">
+      <div @click="clickCatalogue" class="flex flex-row items-center gap-x-1.5">
+        <span class="p-2 text-lg lg:text-2xl">Catalogue</span>
+        <div class="w-14 lg:w-18">
+          <img
+            :src="
+              catalogueButtonActive === true
+                ? '/src/assets/navbaricons/blue_hexagon_book.png'
+                : '/src/assets/navbaricons/orange_hexagon_book.png'
+            "
+          />
+        </div>
       </div>
-    </div>
 
-    <div @click="clickCharts" class="flex flex-row items-center gap-x-1.5">
-      <span class="p-2 text-2xl">Charts</span>
-      <div class="w-18">
-        <img
-          :src="
-            chartsButtonActive === true
-              ? '/src/assets/navbaricons/blue_hexagon_pie_chart.png'
-              : '/src/assets/navbaricons/orange_hexagon_pie_chart.png'
-          "
-        />
+      <div @click="clickCharts" class="flex flex-row items-center gap-x-1.5">
+        <span class="p-2 text-lg lg:text-2xl">Charts</span>
+        <div class="w-14 lg:w-18">
+          <img
+            :src="
+              chartsButtonActive === true
+                ? '/src/assets/navbaricons/blue_hexagon_pie_chart.png'
+                : '/src/assets/navbaricons/orange_hexagon_pie_chart.png'
+            "
+          />
+        </div>
       </div>
-    </div>
 
-    <div @click="clickExplore" class="flex flex-row items-center gap-x-1.5">
-      <span class="p-2 text-2xl">Explore</span>
-      <div class="w-18">
-        <img
-          :src="
-            exploreButtonActive === true
-              ? '/src/assets/navbaricons/blue_hexagon_explore.png'
-              : '/src/assets/navbaricons/orange_hexagon_explore.png'
-          "
-        />
+      <div @click="clickExplore" class="flex flex-row items-center gap-x-1.5">
+        <span class="p-2 text-lg lg:text-2xl">Explore</span>
+        <div class="w-14 lg:w-18">
+          <img
+            :src="
+              exploreButtonActive === true
+                ? '/src/assets/navbaricons/blue_hexagon_explore.png'
+                : '/src/assets/navbaricons/orange_hexagon_explore.png'
+            "
+          />
+        </div>
       </div>
     </div>
   </div>

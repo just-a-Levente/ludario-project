@@ -51,9 +51,9 @@ function openEditModal() {
 <template>
   <div
     data-testid="boardgame-item"
-    class="flex flex-row items-center justify-between bg-mauve-200 p-4 text-2xl"
+    class="flex flex-col items-center justify-between bg-mauve-200 p-4 text-lg sm:flex-row sm:text-2xl"
   >
-    <div class="overflow-hidden text-ellipsis whitespace-nowrap">
+    <div class="text-center sm:overflow-hidden sm:text-ellipsis sm:whitespace-nowrap">
       {{ props.boardgame?.name }} - {{ props.boardgame?.producer }} -
       {{ props.boardgame?.numberOfCopies }} copies - {{ props.boardgame?.minNumberOfPlayers }}-{{
         props.boardgame?.maxNumberOfPlayers

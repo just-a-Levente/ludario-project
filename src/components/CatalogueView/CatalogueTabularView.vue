@@ -13,7 +13,7 @@ const { open } = useAddBoardGameModal()
 const visualViewActive = ref(false)
 
 const visibleBoardGamesOnPage = 7
-const visibleBoardGameCardsOnPage = 10
+const visibleBoardGameCardsOnPage = 12
 
 const page = ref(0)
 const totalPages = computed(() => {
@@ -60,28 +60,31 @@ function showAddModal() {
 </script>
 
 <template>
-  <div class="flex min-h-screen flex-col items-center justify-between p-12">
+  <div class="flex min-h-screen flex-col items-center justify-between p-8">
     <div v-if="visualViewActive === false" class="flex w-11/12 flex-col gap-y-4 overflow-y-scroll">
       <div class="boardgameListItem" v-for="boardgame in visibleBoardGames" :key="boardgame.id">
         <BoardGameListItem :boardgame="boardgame" />
       </div>
     </div>
-    <div v-if="visualViewActive === true" class="flex w-11/12 flex-row flex-wrap gap-5">
+    <div
+      v-if="visualViewActive === true"
+      class="flex w-11/12 flex-row flex-wrap justify-center gap-5"
+    >
       <div v-for="boardgame in visibleBoardGames" :key="boardgame.id">
         <BoardGameCardItem :boardgame="boardgame" />
       </div>
     </div>
-    <div class="flex w-11/12 flex-row justify-evenly pt-6">
+    <div class="flex w-11/12 flex-col items-center justify-evenly gap-4 pt-6 lg:flex-row">
       <div>
         <button
           id="addButton"
-          class="rounded-lg bg-slate-500 px-2 py-0.5 text-2xl text-slate-200 hover:bg-slate-600 active:bg-slate-800"
+          class="rounded-lg bg-slate-500 px-2 py-0.5 text-xl text-slate-200 hover:bg-slate-600 active:bg-slate-800"
           @click="showAddModal"
         >
           + Add boardgame
         </button>
       </div>
-      <div class="flex flex-row gap-x-3 text-2xl">
+      <div class="flex flex-row gap-x-3 text-xl">
         <button
           class="rounded-lg bg-orange-300 px-2 py-0.5 hover:bg-orange-500 active:bg-orange-600"
           @click="getStartingPage"
