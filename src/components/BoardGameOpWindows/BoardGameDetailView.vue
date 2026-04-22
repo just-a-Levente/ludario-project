@@ -23,21 +23,19 @@ function goBackToCatalogue() {
 </script>
 
 <template>
-  <div
-    class="flex w-full flex-col justify-center gap-y-3 overflow-y-scroll p-6 text-2xl lg:w-4/5 lg:text-lg"
-  >
+  <div class="flex w-full flex-col justify-center gap-y-3 overflow-y-scroll p-6 text-lg lg:w-4/5">
     <button @click="goBackToCatalogue" class="self-end">← Back</button>
     <div class="flex flex-col gap-y-12 bg-orange-300 p-5">
-      <div class="flex flex-col items-center gap-x-8 lg:flex-row">
+      <div class="flex flex-col items-center gap-4 gap-x-8 lg:flex-row">
         <img
           :src="detailedBoardgame?.thumbnailURL"
           alt="Boardgame thumbnail"
           class="w-full lg:w-1/3"
         />
         <div class="flex w-full flex-col items-center gap-y-3 lg:w-2/3 lg:items-start lg:gap-y-0">
-          <div class="text-5xl font-bold lg:text-3xl">{{ detailedBoardgame?.name }}</div>
-          <div class="pb-8 text-4xl lg:text-2xl">{{ detailedBoardgame?.producer }}</div>
-          <div class="text-3xl font-bold lg:text-2xl">{{ detailedBoardgame?.price }} RON</div>
+          <div class="text-2xl font-bold lg:text-3xl">{{ detailedBoardgame?.name }}</div>
+          <div class="pb-8 text-xl lg:text-2xl">{{ detailedBoardgame?.producer }}</div>
+          <div class="text-2xl font-bold">{{ detailedBoardgame?.price }} RON</div>
           <div>{{ detailedBoardgame?.numberOfCopies }} copies</div>
           <div>
             {{ detailedBoardgame?.minNumberOfPlayers }} -

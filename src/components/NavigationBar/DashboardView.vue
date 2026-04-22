@@ -18,7 +18,11 @@ onMounted(() => {
       <TheNavBar />
     </div>
     <div class="min-w-0 flex-1 overflow-y-scroll">
-      <RouterView />
+      <RouterView v-slot="{ Component, route }">
+        <Transition name="fade" mode="out-in">
+          <component :is="Component" :key="route.path" />
+        </Transition>
+      </RouterView>
     </div>
     <div class="pointer-events-none fixed inset-0 z-50 flex items-center justify-center">
       <div
@@ -30,3 +34,38 @@ onMounted(() => {
     </div>
   </div>
 </template>
+
+<style lang="css" scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.6s ease;
+}
+
+.fade-enter-from {
+  opacity: 0;
+}
+
+.fade-leave-to {
+  opacity: 0;
+}
+
+@media (width >= 64rem) {
+  .fade-enter-from {
+    transform: translateX(10px);
+  }
+
+  .fade-leave-to {
+    transform: translateX(-10px);
+  }
+}
+
+@media (width < 64rem) {
+  .fade-enter-from {
+    transform: translateY(10px);
+  }
+
+  .fade-leave-to {
+    transform: translateY(-10px);
+  }
+}
+</style>
