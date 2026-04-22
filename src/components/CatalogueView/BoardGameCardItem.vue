@@ -5,6 +5,7 @@ import DeleteBoardGameModal from '../BoardGameOpWindows/DeleteBoardGameModal.vue
 import EditBoardGameModal from '../BoardGameOpWindows/EditBoardGameModal.vue'
 import { useDeleteBoardGameModal } from '@/composables/useDeleteBoardGameModal'
 import { useEditBoardGameModal } from '@/composables/useEditBoardGameModal'
+import { useCookieManager } from '@/composables/useCookieManager'
 
 const props = defineProps({
   boardgame: createBoardGame,
@@ -13,9 +14,21 @@ const props = defineProps({
 const { deleteOpen, changeBoardgameToBeDeleted } = useDeleteBoardGameModal()
 const { editOpen, changeBoardGameToBeEdited } = useEditBoardGameModal()
 const router = useRouter()
+const cookieManager = useCookieManager()
 
 function openDetailModal() {
   if (props.boardgame === undefined) return
+
+  const recentBoardgameIDs = cookieManager.readCookie<number[]>('recentBoardgames')
+  if (recentBoardgameIDs === null) {
+    const newBoardgameIDList = [props.boardgame.id]
+    cookieManager.writeCookie('recentBoardgames', newBoardgameIDList, 7)
+  } else {
+    if (recentBoardgameIDs.length >= 15) recentBoardgameIDs.pop()
+
+    recentBoardgameIDs.unshift(props.boardgame.id)
+    cookieManager.writeCookie('recentBoardgames', recentBoardgameIDs, 7)
+  }
 
   router.push(`/dashboard/boardgames/${props.boardgame.id}`)
 }
