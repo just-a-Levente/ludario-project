@@ -24,7 +24,7 @@ function goBackToCatalogue() {
 
 <template>
   <div
-    class="flex w-full flex-col justify-center gap-y-3 overflow-y-scroll p-6 text-2xl lg:w-3/5 lg:text-lg"
+    class="flex w-full flex-col justify-center gap-y-3 overflow-y-scroll p-6 text-2xl lg:w-4/5 lg:text-lg"
   >
     <button @click="goBackToCatalogue" class="self-end">← Back</button>
     <div class="flex flex-col gap-y-12 bg-orange-300 p-5">

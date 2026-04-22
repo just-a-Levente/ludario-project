@@ -23,7 +23,7 @@ function clickExplore() {}
 
 <template>
   <div
-    class="flex h-auto flex-col items-center gap-y-2 bg-orange-300 p-3 sm:flex-row sm:justify-between sm:gap-x-4 sm:p-4 lg:mr-6 lg:h-dvh lg:flex-col lg:items-end lg:justify-normal lg:gap-y-3 lg:px-4 lg:py-6"
+    class="flex h-auto flex-col items-center gap-y-2 border-b-8 border-b-slate-500 bg-orange-300 p-3 sm:flex-row sm:justify-between sm:gap-x-4 sm:p-4 lg:mr-6 lg:h-dvh lg:flex-col lg:items-end lg:justify-normal lg:gap-y-3 lg:border-r-8 lg:border-b-0 lg:border-r-slate-500 lg:px-4 lg:py-6"
   >
     <img src="/logo_with_title.png" alt="Ludario logo" class="w-40 sm:w-48 lg:w-56 lg:pb-6" />
 

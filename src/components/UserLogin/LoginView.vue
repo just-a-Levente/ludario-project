@@ -24,6 +24,9 @@ async function hashString(inputString: string) {
 // TODO add more error statuses
 const errorStatus = ref(false)
 
+const isTransitionActive = ref(false)
+const transitionDuration = 700
+
 async function validateLoginInput() {
   // TODO implement validating against the user store + error messages + register
   const inputPasswordHash = await hashString(formInputForUser.value.passwordInput)
@@ -32,7 +35,12 @@ async function validateLoginInput() {
   if (passwordHash === inputPasswordHash) {
     errorStatus.value = false
     userstore.setCurrentUser(formInputForUser.value.emailInput)
-    router.push('/dashboard/boardgames')
+
+    isTransitionActive.value = true
+
+    setTimeout(() => {
+      router.push('/dashboard/boardgames')
+    }, transitionDuration)
   } else {
     errorStatus.value = true
   }
@@ -100,5 +108,14 @@ async function validateLoginInput() {
       <img src="/public/images/bottom_hexagons_updated.png" class="md:hidden" />
       <img src="/public/images/bottom_hexagons_full.png" class="hidden md:inline" />
     </div>
+    <div
+      class="fixed inset-0 z-50 border-t-8 border-t-orange-600 bg-slate-500 transition-transform duration-700 ease-in-out"
+      :class="isTransitionActive ? 'translate-y-0' : 'translate-y-full'"
+    ></div>
+    <!--
+    <Transition name="card-slide-up">
+      <div v-if="isTransitionActive" class="fixed inset-0 z-50 bg-slate-500"></div>
+    </Transition>
+    -->
   </div>
 </template>
