@@ -83,16 +83,12 @@ async function validateLoginInput() {
             v-model="formInputForUser.passwordInput"
           />
 
-          <!-- EXPAND THIS -->
-          <span v-show="errorStatus" class="text-orange-600">ERROR</span>
+          <span v-show="errorStatus" class="text-orange-600"
+            >Invalid email-password combination</span
+          >
         </div>
-        <div class="flex flex-row items-end justify-between rounded-xl">
-          <div class="w-1/2">
-            <span class="text-sm text-orange-600"
-              >You don't have an account? Create an account</span
-            >
-          </div>
-          <div>
+        <div class="flex w-96 flex-row-reverse justify-between rounded-xl">
+          <div class="w-auto">
             <button
               @click.prevent="validateLoginInput"
               data-testid="loginButton"

@@ -25,7 +25,7 @@ function goBackToCatalogue() {
 <template>
   <div class="flex w-full flex-col justify-center gap-y-3 overflow-y-scroll p-6 text-lg lg:w-4/5">
     <button @click="goBackToCatalogue" class="self-end">← Back</button>
-    <div class="flex flex-col gap-y-12 bg-orange-300 p-5">
+    <div class="flex flex-col gap-y-12 rounded-2xl border-8 border-slate-500 bg-orange-300 p-5">
       <div class="flex flex-col items-center gap-4 gap-x-8 lg:flex-row">
         <img
           :src="detailedBoardgame?.thumbnailURL"

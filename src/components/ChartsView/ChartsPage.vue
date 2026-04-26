@@ -142,14 +142,14 @@ async function addFakeBoardgames() {
     )
 
     currBoardgame += 1
-    await delay(5000)
+    await delay(1000)
   }
 }
 </script>
 
 <template>
   <div
-    class="flex aspect-4/3 w-full flex-col gap-y-4 p-8 sm:aspect-16/10 md:aspect-video md:w-3/4 lg:aspect-2/1 lg:w-2/3"
+    class="flex aspect-4/3 w-full flex-col gap-y-4 self-center p-8 sm:aspect-16/10 md:aspect-video lg:aspect-2/1 lg:w-3/4 lg:items-start"
   >
     <div class="text-2xl md:text-3xl">Top 5 producers by number of copies</div>
     <Chart class="h-full w-full" type="bar" :data="producerChartData" :options="chartOptions" />
