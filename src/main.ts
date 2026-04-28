@@ -9,6 +9,8 @@ import Aura from '@primevue/themes/aura'
 import App from './App.vue'
 import router from './router'
 
+import { VueQueryPlugin, QueryClient } from '@tanstack/vue-query'
+
 const app = createApp(App)
 
 app.use(createPinia())
@@ -23,5 +25,8 @@ app.use(PrimeVue, {
     },
   },
 })
+
+const queryClient = new QueryClient()
+app.use(VueQueryPlugin, { queryClient })
 
 app.mount('#app')
