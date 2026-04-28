@@ -25,14 +25,13 @@ export const boardgameApi = {
     })
   },
 
-  async deleteBoardgame(boardgameId: number): Promise<void> {
-    await api.delete('/api/boardgames/' + boardgameId)
+  async updateBoardgame(boardgameData: Record<string, string>): Promise<void> {
+    await api.put(`/api/boardgames`, {
+      ...boardgameData,
+    })
   },
 
-  async updateBoardgame(boardgame: BoardGame): Promise<void> {
-    await api.put(`/api/boardgames`, {
-      ...boardgame,
-      tags: boardgame.tags.join(';'),
-    })
+  async deleteBoardgame(boardgameId: number): Promise<void> {
+    await api.delete('/api/boardgames/' + boardgameId)
   },
 }

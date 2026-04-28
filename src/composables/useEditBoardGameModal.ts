@@ -1,37 +1,66 @@
 import { ref } from 'vue'
-import { createBoardGame, copyBoardGame } from '@/data/boardgame'
+import { useUpdateBoardgame } from '@/api_services/api_mutations'
 import type { BoardGame } from '@/data/boardgame'
-import { useBoardGamesStore } from '@/stores/boardgamestore'
 
 const isEditOpen = ref(false)
-const boardGameToBeEdited = ref(createBoardGame({ hidden: false }))
-const editTaglist = ref('')
+
+const form = ref<Record<string, string>>({
+  id: '',
+  hidden: 'false',
+  name: '',
+  producer: '',
+  description: '',
+  price: '',
+  numberOfCopies: '',
+  minNumberOfPlayers: '',
+  maxNumberOfPlayers: '',
+  thumbnailURL: '',
+})
+
+const taglist = ref('')
 
 export function useEditBoardGameModal() {
-  const store = useBoardGamesStore()
+  const { mutate: updateBoardgame, errors } = useUpdateBoardgame()
 
   const editOpen = () => (isEditOpen.value = true)
   const editClose = () => (isEditOpen.value = false)
-  const changeBoardGameToBeEdited = (newBoardGame: BoardGame) => {
-    boardGameToBeEdited.value = copyBoardGame(newBoardGame)
 
-    editTaglist.value = ''
-    boardGameToBeEdited.value.tags.forEach((element) => {
-      editTaglist.value += element + ';'
+  const changeBoardGameToBeEdited = (boardgame: BoardGame) => {
+    form.value = {
+      id: String(boardgame.id),
+      hidden: String(boardgame.hidden),
+      name: boardgame.name,
+      producer: boardgame.producer,
+      description: boardgame.description,
+      price: String(boardgame.price),
+      numberOfCopies: String(boardgame.numberOfCopies),
+      minNumberOfPlayers: String(boardgame.minNumberOfPlayers),
+      maxNumberOfPlayers: String(boardgame.maxNumberOfPlayers),
+      thumbnailURL: boardgame.thumbnailURL,
+    }
+
+    taglist.value = boardgame.tags.join(';')
+  }
+
+  const submit = () => {
+    const update_request_fields = {
+      ...form.value,
+      tags: taglist.value,
+    }
+
+    updateBoardgame(update_request_fields, {
+      onSuccess: () => editClose(),
     })
-    editTaglist.value = editTaglist.value.slice(0, editTaglist.value.length - 1)
   }
-  const editBoardgame = () => {
-    boardGameToBeEdited.value.tags = editTaglist.value.split(';')
-    store.updateBoardGame(boardGameToBeEdited.value)
-  }
+
   return {
     isEditOpen,
-    boardGameToBeEdited,
-    editTaglist,
+    form,
+    taglist,
+    errors,
     editOpen,
     editClose,
     changeBoardGameToBeEdited,
-    editBoardgame,
+    submit,
   }
 }

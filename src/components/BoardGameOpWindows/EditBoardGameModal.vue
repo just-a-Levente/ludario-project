@@ -1,81 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useEditBoardGameModal } from '@/composables/useEditBoardGameModal'
 
-const { isEditOpen, editClose, boardGameToBeEdited, editBoardgame, editTaglist } =
-  useEditBoardGameModal()
-
-const errors = ref({
-  name: '',
-  producer: '',
-  description: '',
-  price: '',
-  numberOfCopies: '',
-  minNumberOfPlayers: '',
-  maxNumberOfPlayers: '',
-  playerCount: '',
-  thumbnailURL: '',
-  tags: '',
-})
-const emptyErrors = ref({
-  name: '',
-  producer: '',
-  description: '',
-  price: '',
-  numberOfCopies: '',
-  minNumberOfPlayers: '',
-  maxNumberOfPlayers: '',
-  playerCount: '',
-  thumbnailURL: '',
-  tags: '',
-})
-
-function validateInput() {
-  errors.value = {
-    name: '',
-    producer: '',
-    description: '',
-    price: '',
-    numberOfCopies: '',
-    minNumberOfPlayers: '',
-    maxNumberOfPlayers: '',
-    playerCount: '',
-    thumbnailURL: '',
-    tags: '',
-  }
-
-  if (boardGameToBeEdited.value.name == '') errors.value.name = 'Name required'
-  if (boardGameToBeEdited.value.producer == '') errors.value.producer = 'Producer required'
-  if (boardGameToBeEdited.value.description == '') errors.value.description = 'Description required'
-  if (isNaN(boardGameToBeEdited.value.price) || boardGameToBeEdited.value.price <= 0)
-    errors.value.price = 'Price required'
-  if (boardGameToBeEdited.value.numberOfCopies <= 0)
-    errors.value.numberOfCopies = 'Must be positive integer'
-  if (boardGameToBeEdited.value.minNumberOfPlayers <= 0)
-    errors.value.minNumberOfPlayers = 'Must be positive integer'
-  if (boardGameToBeEdited.value.maxNumberOfPlayers <= 0)
-    errors.value.maxNumberOfPlayers = 'Must be positive integer'
-  if (boardGameToBeEdited.value.minNumberOfPlayers > boardGameToBeEdited.value.maxNumberOfPlayers)
-    errors.value.playerCount = 'Minimum count must be <= maximum count'
-  if (editTaglist.value == '') errors.value.tags = 'Tags required'
-  if (boardGameToBeEdited.value.thumbnailURL == '') errors.value.thumbnailURL = 'Photo URL required'
-
-  // this feels bad
-  return JSON.stringify(emptyErrors.value) === JSON.stringify(errors.value)
-}
+const { isEditOpen, form, taglist, errors, editClose, submit } = useEditBoardGameModal()
 
 function closeOnBackdropClick(e: MouseEvent) {
   if (e.target === e.currentTarget) {
-    errors.value = emptyErrors.value
     editClose()
   }
-}
-
-function editSelectedBoardgame() {
-  if (!validateInput()) return
-
-  editBoardgame()
-  editClose()
 }
 </script>
 
@@ -94,7 +25,7 @@ function editSelectedBoardgame() {
         <input
           data-testid="editNameField"
           type="text"
-          v-model="boardGameToBeEdited.name"
+          v-model="form.name"
           class="rounded-lg bg-white p-2"
           placeholder="Enter name"
         />
@@ -106,7 +37,7 @@ function editSelectedBoardgame() {
         <input
           data-testid="editProducerField"
           type="text"
-          v-model="boardGameToBeEdited.producer"
+          v-model="form.producer"
           class="rounded-lg bg-white p-2"
           placeholder="Enter producer"
         />
@@ -120,7 +51,7 @@ function editSelectedBoardgame() {
         <span>Description:</span>
         <textarea
           data-testid="editDescriptionField"
-          v-model="boardGameToBeEdited.description"
+          v-model="form.description"
           class="rounded-lg bg-white p-2"
           placeholder="Enter description"
         />
@@ -135,7 +66,7 @@ function editSelectedBoardgame() {
         <input
           data-testid="editPriceField"
           type="text"
-          v-model="boardGameToBeEdited.price"
+          v-model="form.price"
           class="rounded-lg bg-white p-2"
           placeholder="Enter price"
         />
@@ -146,8 +77,8 @@ function editSelectedBoardgame() {
         <span>Number of copies:</span>
         <input
           data-testid="editCopiesField"
-          type="number"
-          v-model="boardGameToBeEdited.numberOfCopies"
+          type="text"
+          v-model="form.numberOfCopies"
           class="rounded-lg bg-white p-2"
           placeholder="Enter number of copies"
         />
@@ -165,8 +96,8 @@ function editSelectedBoardgame() {
               <span>Min</span>
               <input
                 data-testid="editMinPlayerField"
-                type="number"
-                v-model="boardGameToBeEdited.minNumberOfPlayers"
+                type="text"
+                v-model="form.minNumberOfPlayers"
                 class="w-2/3 rounded-lg bg-white"
               />
               <span
@@ -180,8 +111,8 @@ function editSelectedBoardgame() {
               <span>Max</span>
               <input
                 data-testid="editMaxPlayerField"
-                type="number"
-                v-model="boardGameToBeEdited.maxNumberOfPlayers"
+                type="text"
+                v-model="form.maxNumberOfPlayers"
                 class="w-2/3 rounded-lg bg-white"
               />
               <span
@@ -204,7 +135,7 @@ function editSelectedBoardgame() {
         <input
           data-testid="editTagsField"
           type="text"
-          v-model="editTaglist"
+          v-model="taglist"
           class="rounded-lg bg-white p-2"
           placeholder="Enter tags (separated by ;)"
         />
@@ -216,7 +147,7 @@ function editSelectedBoardgame() {
         <input
           data-testid="editThumbnailField"
           type="text"
-          v-model="boardGameToBeEdited.thumbnailURL"
+          v-model="form.thumbnailURL"
           class="rounded-lg bg-white p-2"
           placeholder="Enter image URL"
         />
@@ -226,11 +157,11 @@ function editSelectedBoardgame() {
           class="text-sm text-orange-600"
           >{{ errors.thumbnailURL }}</span
         >
-        <img v-bind:src="boardGameToBeEdited.thumbnailURL" />
+        <img v-bind:src="form.thumbnailURL" />
 
         <button
           data-testid="editBoardgameButton"
-          @click="editSelectedBoardgame"
+          @click="submit"
           class="rounded-lg bg-orange-300 px-2 py-0.5 hover:bg-orange-500 active:bg-orange-600"
         >
           Edit board game

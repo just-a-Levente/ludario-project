@@ -26,14 +26,23 @@ export function useAddBoardgame() {
 export function useUpdateBoardgame() {
   const queryClient = useQueryClient()
 
-  return useMutation({
+  const errors = ref<Record<string, string>>({})
+
+  const mutation = useMutation({
     mutationFn: boardgameApi.updateBoardgame,
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['boardgames'] })
       queryClient.invalidateQueries({ queryKey: ['boardgame'] })
+      errors.value = {}
+    },
+
+    onError: (error: any) => {
+      errors.value = error.response?.data?.detail ?? {}
     },
   })
+
+  return { ...mutation, errors }
 }
 
 export function useDeleteBoardgame() {
