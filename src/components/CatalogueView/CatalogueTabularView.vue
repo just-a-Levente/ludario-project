@@ -1,39 +1,44 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useBoardGamesStore } from '@/stores/boardgamestore'
+import { useBoardgames } from '@/api_services/api_queries'
+import { useAddBoardGameModal } from '@/composables/useAddBoardGameModal'
 import BoardGameListItem from '@/components/CatalogueView/BoardGameListItem.vue'
 import AddBoardGameModal from '../BoardGameOpWindows/AddBoardGameModal.vue'
-import { useAddBoardGameModal } from '@/composables/useAddBoardGameModal'
 import ToggleSwitch from 'primevue/toggleswitch'
 import BoardGameCardItem from './BoardGameCardItem.vue'
 
-const store = useBoardGamesStore()
 const { open } = useAddBoardGameModal()
-
-const visualViewActive = ref(false)
 
 const visibleBoardGamesOnPage = 7
 const visibleBoardGameCardsOnPage = 12
 
-const page = ref(0)
-const totalPages = computed(() => {
-  if (visualViewActive.value)
-    return Math.ceil(store.boardgames.length / visibleBoardGameCardsOnPage)
+const { data: boardgames } = useBoardgames()
 
-  return Math.ceil(store.boardgames.length / visibleBoardGamesOnPage)
+const visualViewActive = ref(false)
+const page = ref(0)
+
+const totalPages = computed(() => {
+  if (!boardgames.value) return 0
+
+  const len = boardgames.value.length
+
+  return visualViewActive.value
+    ? Math.ceil(len / visibleBoardGameCardsOnPage)
+    : Math.ceil(len / visibleBoardGamesOnPage)
 })
 
 const visibleBoardGames = computed(() => {
-  if (visualViewActive.value) {
-    const startingBoardGame = page.value * visibleBoardGameCardsOnPage
-    return store.boardgames.slice(
-      startingBoardGame,
-      startingBoardGame + visibleBoardGameCardsOnPage,
-    )
-  }
+  if (!boardgames.value) return []
 
-  const startingBoardGame = page.value * visibleBoardGamesOnPage
-  return store.boardgames.slice(startingBoardGame, startingBoardGame + visibleBoardGamesOnPage)
+  const start = visualViewActive.value
+    ? page.value * visibleBoardGameCardsOnPage
+    : page.value * visibleBoardGamesOnPage
+
+  const end = visualViewActive.value
+    ? start + visibleBoardGameCardsOnPage
+    : start + visibleBoardGamesOnPage
+
+  return boardgames.value.slice(start, end)
 })
 
 function getStartingPage() {
@@ -41,7 +46,7 @@ function getStartingPage() {
 }
 
 function getEndingPage() {
-  page.value = totalPages.value - 1
+  page.value = Math.max(totalPages.value - 1, 0)
 }
 
 function getPreviousPage() {
