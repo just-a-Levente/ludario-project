@@ -1,51 +1,29 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useAddBoardGameModal } from '@/composables/useAddBoardGameModal'
-import { createBoardGame } from '@/data/boardgame'
-import { useBoardGamesStore } from '@/stores/boardgamestore'
 
-const store = useBoardGamesStore()
-const { isOpen, close } = useAddBoardGameModal()
+const { isOpen, errors, close, submit } = useAddBoardGameModal()
 
-const emptyBoardGame = ref(
-  createBoardGame({
-    hidden: false,
-    thumbnailURL: '',
-    stars: [],
-  }),
-)
+const form = ref({
+  name: '',
+  producer: '',
+  description: '',
+  price: '',
+  numberOfCopies: '',
+  minNumberOfPlayers: '',
+  maxNumberOfPlayers: '',
+  thumbnailURL: '',
+})
 const taglist = ref('')
-const errors = ref({
-  name: '',
-  producer: '',
-  description: '',
-  price: '',
-  numberOfCopies: '',
-  minNumberOfPlayers: '',
-  maxNumberOfPlayers: '',
-  playerCount: '',
-  thumbnailURL: '',
-  tags: '',
-})
-const emptyErrors = ref({
-  name: '',
-  producer: '',
-  description: '',
-  price: '',
-  numberOfCopies: '',
-  minNumberOfPlayers: '',
-  maxNumberOfPlayers: '',
-  playerCount: '',
-  thumbnailURL: '',
-  tags: '',
-})
 
 function closeOnBackdropClick(e: MouseEvent) {
   if (e.target === e.currentTarget) close()
 }
 
-function validateInput() {
-  errors.value = {
+function sendNewBoardGame() {
+  submit(form.value, taglist.value)
+
+  form.value = {
     name: '',
     producer: '',
     description: '',
@@ -53,64 +31,10 @@ function validateInput() {
     numberOfCopies: '',
     minNumberOfPlayers: '',
     maxNumberOfPlayers: '',
-    playerCount: '',
     thumbnailURL: '',
-    tags: '',
   }
 
-  if (emptyBoardGame.value.name == '') errors.value.name = 'Name required'
-  if (emptyBoardGame.value.producer == '') errors.value.producer = 'Producer required'
-  if (emptyBoardGame.value.description == '') errors.value.description = 'Description required'
-  if (isNaN(emptyBoardGame.value.price) || emptyBoardGame.value.price <= 0)
-    errors.value.price = 'Price required'
-  if (emptyBoardGame.value.numberOfCopies <= 0)
-    errors.value.numberOfCopies = 'Must be positive integer'
-  if (emptyBoardGame.value.minNumberOfPlayers <= 0)
-    errors.value.minNumberOfPlayers = 'Must be positive integer'
-  if (emptyBoardGame.value.maxNumberOfPlayers <= 0)
-    errors.value.maxNumberOfPlayers = 'Must be positive integer'
-  if (emptyBoardGame.value.minNumberOfPlayers > emptyBoardGame.value.maxNumberOfPlayers)
-    errors.value.playerCount = 'Minimum count must be <= maximum count'
-  if (taglist.value == '') errors.value.tags = 'Tags required'
-  if (emptyBoardGame.value.thumbnailURL == '') errors.value.thumbnailURL = 'Photo URL required'
-
-  // this feels bad
-  return JSON.stringify(emptyErrors.value) === JSON.stringify(errors.value)
-}
-
-function sendNewBoardGame() {
-  if (!validateInput()) return
-
-  const newID = store.getLastID()
-  const newBoardGame = createBoardGame({
-    id: newID,
-    hidden: emptyBoardGame.value.hidden,
-    name: emptyBoardGame.value.name,
-    producer: emptyBoardGame.value.producer,
-    description: emptyBoardGame.value.description,
-    price: emptyBoardGame.value.price,
-    numberOfCopies: emptyBoardGame.value.numberOfCopies,
-    minNumberOfPlayers: emptyBoardGame.value.minNumberOfPlayers,
-    maxNumberOfPlayers: emptyBoardGame.value.maxNumberOfPlayers,
-    thumbnailURL: emptyBoardGame.value.thumbnailURL,
-    tags: taglist.value.split(';'),
-    stars: emptyBoardGame.value.stars,
-  })
-
-  emptyBoardGame.value.name = ''
-  emptyBoardGame.value.producer = ''
-  emptyBoardGame.value.description = ''
-  emptyBoardGame.value.price = 0
-  emptyBoardGame.value.numberOfCopies = 0
-  emptyBoardGame.value.minNumberOfPlayers = 0
-  emptyBoardGame.value.maxNumberOfPlayers = 0
   taglist.value = ''
-  emptyBoardGame.value.thumbnailURL = ''
-
-  store.addBoardGame(newBoardGame)
-  // empty form and errors
-  // emit()
-  close()
 }
 </script>
 
@@ -128,7 +52,7 @@ function sendNewBoardGame() {
         <input
           id="addNameField"
           type="text"
-          v-model="emptyBoardGame.name"
+          v-model="form.name"
           class="rounded-lg bg-white p-2"
           placeholder="Enter name"
         />
@@ -140,7 +64,7 @@ function sendNewBoardGame() {
         <input
           id="addProducerField"
           type="text"
-          v-model="emptyBoardGame.producer"
+          v-model="form.producer"
           class="rounded-lg bg-white p-2"
           placeholder="Enter producer"
         />
@@ -151,7 +75,7 @@ function sendNewBoardGame() {
         <span>Description:</span>
         <textarea
           id="addDescriptionField"
-          v-model="emptyBoardGame.description"
+          v-model="form.description"
           class="rounded-lg bg-white p-2"
           placeholder="Enter description"
         />
@@ -166,7 +90,7 @@ function sendNewBoardGame() {
         <input
           id="addPriceField"
           type="text"
-          v-model="emptyBoardGame.price"
+          v-model="form.price"
           class="rounded-lg bg-white p-2"
           placeholder="Enter price"
         />
@@ -177,8 +101,8 @@ function sendNewBoardGame() {
         <span>Number of copies:</span>
         <input
           id="addCopiesField"
-          type="number"
-          v-model="emptyBoardGame.numberOfCopies"
+          type="text"
+          v-model="form.numberOfCopies"
           class="rounded-lg bg-white p-2"
           placeholder="Enter number of copies"
         />
@@ -193,8 +117,8 @@ function sendNewBoardGame() {
               <span>Min</span>
               <input
                 id="addMinPlayerField"
-                type="number"
-                v-model="emptyBoardGame.minNumberOfPlayers"
+                type="text"
+                v-model="form.minNumberOfPlayers"
                 class="w-2/3 rounded-lg bg-white"
               />
               <span
@@ -208,8 +132,8 @@ function sendNewBoardGame() {
               <span>Max</span>
               <input
                 id="addMaxPlayerField"
-                type="number"
-                v-model="emptyBoardGame.maxNumberOfPlayers"
+                type="text"
+                v-model="form.maxNumberOfPlayers"
                 class="w-2/3 rounded-lg bg-white"
               />
               <span
@@ -244,14 +168,14 @@ function sendNewBoardGame() {
         <input
           id="addThumbnailField"
           type="text"
-          v-model="emptyBoardGame.thumbnailURL"
+          v-model="form.thumbnailURL"
           class="rounded-lg bg-white p-2"
           placeholder="Enter image URL"
         />
         <span id="addThumbnailError" v-show="errors.thumbnailURL" class="text-sm text-orange-600">{{
           errors.thumbnailURL
         }}</span>
-        <img v-bind:src="emptyBoardGame.thumbnailURL" />
+        <img v-bind:src="form.thumbnailURL" />
 
         <button
           id="addNewBoardgameButton"

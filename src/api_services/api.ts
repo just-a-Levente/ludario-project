@@ -19,10 +19,9 @@ export const boardgameApi = {
     return data
   },
 
-  async addBoardgame(boardgame: BoardGame): Promise<void> {
+  async addBoardgame(boardgameData: Record<string, string>): Promise<void> {
     await api.post('/api/boardgames', {
-      ...boardgame,
-      tags: boardgame.tags.join(';'),
+      ...boardgameData,
     })
   },
 

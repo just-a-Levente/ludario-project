@@ -1,16 +1,26 @@
+import { ref } from 'vue'
 import { useMutation, useQueryClient } from '@tanstack/vue-query'
 import { boardgameApi } from '@/api_services/api'
 
 export function useAddBoardgame() {
   const queryClient = useQueryClient()
 
-  return useMutation({
+  const errors = ref<Record<string, string>>({})
+
+  const mutation = useMutation({
     mutationFn: boardgameApi.addBoardgame,
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['boardgames'] })
+      errors.value = {}
+    },
+
+    onError: (error: any) => {
+      errors.value = error.response?.data?.detail ?? {}
     },
   })
+
+  return { ...mutation, errors }
 }
 
 export function useUpdateBoardgame() {
