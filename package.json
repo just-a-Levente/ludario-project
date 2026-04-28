@@ -21,6 +21,8 @@
     "@primeuix/themes": "^2.0.3",
     "@primevue/themes": "^4.5.4",
     "@tailwindcss/vite": "^4.2.2",
+    "@tanstack/vue-query": "^5.100.5",
+    "@tanstack/vue-query-devtools": "^6.1.24",
     "axios": "^1.15.2",
     "chart.js": "^4.5.1",
     "pinia": "^3.0.4",
