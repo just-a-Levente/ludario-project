@@ -25,7 +25,7 @@ function deleteSelectedBoardgame() {
         data-testid="deleteModal"
         class="flex aspect-2/1 flex-col items-center gap-y-6 overflow-y-scroll rounded-lg border-4 border-mauve-500 bg-slate-200 p-6 text-lg"
       >
-        <div class="w-full">Do you want to delete {{ boardgameToBeDeleted.name }}?</div>
+        <div class="w-full">Do you want to delete {{ boardgameToBeDeleted?.name }}?</div>
         <div class="flex w-full flex-row justify-around">
           <button
             @click.prevent="deleteClose"
