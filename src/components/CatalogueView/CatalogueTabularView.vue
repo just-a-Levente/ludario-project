@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useBoardgames } from '@/api_services/api_queries'
+import { ref, computed, watch } from 'vue'
+import { usePaginatedBoardgames } from '@/api_services/api_queries'
 import { useAddBoardGameModal } from '@/composables/useAddBoardGameModal'
 import BoardGameListItem from '@/components/CatalogueView/BoardGameListItem.vue'
 import AddBoardGameModal from '../BoardGameOpWindows/AddBoardGameModal.vue'
@@ -12,33 +12,31 @@ const { open } = useAddBoardGameModal()
 const visibleBoardGamesOnPage = 7
 const visibleBoardGameCardsOnPage = 12
 
-const { data: boardgames } = useBoardgames()
-
 const visualViewActive = ref(false)
 const page = ref(0)
+const limit = computed(() =>
+  visualViewActive.value ? visibleBoardGameCardsOnPage : visibleBoardGamesOnPage,
+)
+const offset = computed(() => page.value * limit.value)
 
-const totalPages = computed(() => {
-  if (!boardgames.value) return 0
+const { data, isLoading } = usePaginatedBoardgames(offset, limit)
 
-  const len = boardgames.value.length
-
-  return visualViewActive.value
-    ? Math.ceil(len / visibleBoardGameCardsOnPage)
-    : Math.ceil(len / visibleBoardGamesOnPage)
+const pagination = computed(() => {
+  return {
+    items: data.value?.items ?? [],
+    totalItems: data.value?.totalItems ?? 0,
+    limit: limit.value,
+    page: page.value,
+  }
 })
 
-const visibleBoardGames = computed(() => {
-  if (!boardgames.value) return []
+const totalPages = computed(() => {
+  const total = pagination.value.totalItems
+  const lim = pagination.value.limit
 
-  const start = visualViewActive.value
-    ? page.value * visibleBoardGameCardsOnPage
-    : page.value * visibleBoardGamesOnPage
+  if (isLoading.value) return 1
 
-  const end = visualViewActive.value
-    ? start + visibleBoardGameCardsOnPage
-    : start + visibleBoardGamesOnPage
-
-  return boardgames.value.slice(start, end)
+  return Math.max(1, Math.ceil(total / lim))
 })
 
 function getStartingPage() {
@@ -50,18 +48,26 @@ function getEndingPage() {
 }
 
 function getPreviousPage() {
-  if (page.value == 0) page.value = totalPages.value - 1
-  else page.value--
+  if (page.value > 0) page.value--
 }
 
 function getNextPage() {
-  if (page.value == totalPages.value - 1) page.value = 0
-  else page.value++
+  if (page.value < totalPages.value - 1) page.value++
 }
 
 function showAddModal() {
   open()
 }
+
+watch(limit, () => {
+  page.value = 0
+})
+
+watch(totalPages, (newTotal) => {
+  if (page.value >= newTotal) {
+    page.value = Math.max(0, newTotal - 1)
+  }
+})
 </script>
 
 <template>
@@ -71,7 +77,7 @@ function showAddModal() {
         v-if="visualViewActive === false"
         class="flex w-11/12 flex-col gap-y-4 overflow-y-scroll"
       >
-        <div class="boardgameListItem" v-for="boardgame in visibleBoardGames" :key="boardgame.id">
+        <div class="boardgameListItem" v-for="boardgame in data?.items" :key="boardgame.id">
           <BoardGameListItem :boardgame="boardgame" />
         </div>
       </div>
@@ -79,7 +85,7 @@ function showAddModal() {
         v-if="visualViewActive === true"
         class="flex w-11/12 flex-row flex-wrap justify-center gap-5"
       >
-        <div v-for="boardgame in visibleBoardGames" :key="boardgame.id">
+        <div v-for="boardgame in data?.items" :key="boardgame.id">
           <BoardGameCardItem :boardgame="boardgame" />
         </div>
       </div>
@@ -106,7 +112,8 @@ function showAddModal() {
           >
             &lt;
           </button>
-          <div>{{ page + 1 }} / {{ totalPages }}</div>
+          <div v-if="isLoading">Loading</div>
+          <div v-else>{{ page + 1 }} / {{ totalPages }}</div>
           <button
             class="rounded-lg bg-orange-300 px-2 py-0.5 hover:bg-orange-500 active:bg-orange-600"
             @click="getNextPage"

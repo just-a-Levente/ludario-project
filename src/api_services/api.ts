@@ -1,4 +1,5 @@
 import type { BoardGame } from '@/data/boardgame'
+import type { PaginatedBoardgamesResponse } from './api_schemas'
 import axios from 'axios'
 
 const api = axios.create({
@@ -11,6 +12,20 @@ const api = axios.create({
 export const boardgameApi = {
   async getAllBoardgames(): Promise<BoardGame[]> {
     const { data } = await api.get('/api/boardgames')
+    return data
+  },
+
+  async getBoardgamesPaginated(
+    offset: number,
+    limit: number,
+  ): Promise<PaginatedBoardgamesResponse> {
+    const { data } = await api.get('/api/boardgames/page', {
+      params: {
+        offset,
+        limit,
+      },
+    })
+
     return data
   },
 
