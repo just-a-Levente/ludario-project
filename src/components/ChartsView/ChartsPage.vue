@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch, ref, computed } from 'vue'
+import { computed } from 'vue'
 import { useBoardgames } from '@/api_services/api_queries'
 import Chart from 'primevue/chart'
 
