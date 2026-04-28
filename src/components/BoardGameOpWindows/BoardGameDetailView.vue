@@ -1,20 +1,17 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
 import { computed } from 'vue'
-import { useBoardGamesStore } from '@/stores/boardgamestore'
+import { useBoardgame } from '@/api_services/api_queries'
 
 const route = useRoute()
 const router = useRouter()
 
-const boardgameStore = useBoardGamesStore()
+const id = computed(() => Number(route.params.id))
 
-const detailedBoardgame = computed(() => {
-  const idNum = Number.parseInt(route.params.id)
-  return boardgameStore.getBoardGameByID(idNum)
-})
+const { data: detailedBoardgame } = useBoardgame(id)
+
 const tagList = computed(() => {
-  const idNum = Number.parseInt(route.params.id)
-  return boardgameStore.getBoardGameByID(idNum)?.tags.join(', ')
+  return detailedBoardgame.value?.tags?.join(', ') ?? ''
 })
 
 function goBackToCatalogue() {
