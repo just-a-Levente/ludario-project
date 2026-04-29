@@ -4,27 +4,33 @@ import { boardgameApi } from '@/api_services/api'
 import { createBoardGame } from '@/data/boardgame'
 import { checkNetworkStatus } from './api_connection_check'
 import { offlineQueue } from './api_operation_sync_queue'
+import type { Ref } from 'vue'
 
-export function useAddBoardgame() {
+export function useAddBoardgame(offset: Ref<number>, limit: Ref<number>) {
   const queryClient = useQueryClient()
 
   const errors = ref<Record<string, string>>({})
 
   const mutation = useMutation({
-    mutationFn: boardgameApi.addBoardgame,
+    mutationFn: async (newGame: any) => {
+      const online = await checkNetworkStatus()
+      if (!online) throw new Error('offline')
+      return boardgameApi.addBoardgame(newGame)
+    },
 
     onMutate: async (newGame) => {
-      // optimistic update
-      queryClient.setQueryData(['boardgames'], (old: any) => [
-        ...(old ?? []),
-        createBoardGame(newGame),
-      ])
+      const queryKey = ['boardgames', offset, limit]
+      const previous = queryClient.getQueryData(queryKey)
+      const tempId = -Date.now()
 
-      const online = await checkNetworkStatus()
-      if (!online) {
-        offlineQueue.value.push({ type: 'create', payload: newGame })
-        throw new Error('offline')
-      }
+      queryClient.setQueryData(queryKey, (old: any) => {
+        if (!old) return old
+        return {
+          ...old,
+          items: [...old.items, { ...createBoardGame(newGame), id: tempId }],
+        }
+      })
+      return { previous, tempId, queryKey }
     },
 
     onSuccess: () => {
@@ -32,9 +38,13 @@ export function useAddBoardgame() {
       errors.value = {}
     },
 
-    onError: async (error: any, variables) => {
-      if (error.message === 'offline') return
-      errors.value = error.response?.data?.detail ?? {}
+    onError: async (error: any, variables, context) => {
+      if (error.message === 'offline')
+        offlineQueue.value.push({ type: 'create', payload: variables })
+      else {
+        queryClient.setQueryData(context?.queryKey, context?.previous)
+        errors.value = error.response?.data?.detail ?? {}
+      }
     },
   })
 
@@ -135,16 +145,12 @@ export async function syncQueue(queryClient: any) {
   for (const op of [...offlineQueue.value]) {
     try {
       if (op.type === 'create') await boardgameApi.addBoardgame(op.payload)
-
       if (op.type === 'update') await boardgameApi.updateBoardgame(op.payload)
-
       if (op.type === 'delete') await boardgameApi.deleteBoardgame(op.payload)
 
       offlineQueue.value.shift()
-      console.log(offlineQueue.value.length + ' operations left')
     } catch {
-      console.log('WHY ARE YOU HERE')
-      return // still offline → stop
+      return
     }
   }
 

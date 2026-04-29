@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { createBoardGame } from '@/data/boardgame'
-import DeleteBoardGameModal from '../BoardGameOpWindows/DeleteBoardGameModal.vue'
-import EditBoardGameModal from '../BoardGameOpWindows/EditBoardGameModal.vue'
 import { useDeleteBoardGameModal } from '@/composables/useDeleteBoardGameModal'
 import { useEditBoardGameModal } from '@/composables/useEditBoardGameModal'
 import { useCookieManager } from '@/composables/useCookieManager'
+import DeleteBoardGameModal from '../BoardGameOpWindows/DeleteBoardGameModal.vue'
+import EditBoardGameModal from '../BoardGameOpWindows/EditBoardGameModal.vue'
 
 const props = defineProps({
   boardgame: createBoardGame,
@@ -62,13 +62,21 @@ function openEditModal() {
     </div>
 
     <div class="flex shrink-0 flex-row items-center gap-x-2">
-      <button data-testid="detail-button" @click="openDetailModal">
+      <button
+        data-testid="detail-button"
+        :disabled="props.boardgame?.id < 0"
+        @click="openDetailModal"
+      >
         <img src="/src/assets/icons/details_icon.png" alt="Details" class="w-10" />
       </button>
-      <button data-testid="edit-button" @click="openEditModal">
+      <button data-testid="edit-button" :disabled="props.boardgame?.id < 0" @click="openEditModal">
         <img src="/src/assets/icons/edit_icon.png" alt="Edit" class="w-10" />
       </button>
-      <button data-testid="delete-button" @click="openDeleteModal">
+      <button
+        data-testid="delete-button"
+        :disabled="props.boardgame?.id < 0"
+        @click="openDeleteModal"
+      >
         <img src="/src/assets/icons/delete_icon.png" alt="Delete" class="w-10" />
       </button>
     </div>

@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, watchEffect } from 'vue'
 import { usePaginatedBoardgames } from '@/api_services/api_queries'
 import { useAddBoardGameModal } from '@/composables/useAddBoardGameModal'
 import { simulateOffline } from '@/api_services/api_connection_check'
 import { syncQueue } from '@/api_services/api_mutations'
 import { useQueryClient } from '@tanstack/vue-query'
+import { setAddModalPaginationContext } from '@/composables/useAddBoardGameModal'
 import BoardGameListItem from '@/components/CatalogueView/BoardGameListItem.vue'
 import AddBoardGameModal from '../BoardGameOpWindows/AddBoardGameModal.vue'
 import ToggleSwitch from 'primevue/toggleswitch'
@@ -68,6 +69,10 @@ watch(totalPages, (newTotal) => {
   if (page.value >= newTotal) {
     page.value = Math.max(0, newTotal - 1)
   }
+})
+
+watchEffect(() => {
+  setAddModalPaginationContext(offset.value, limit.value)
 })
 </script>
 
