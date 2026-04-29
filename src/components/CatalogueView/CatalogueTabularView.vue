@@ -2,12 +2,16 @@
 import { ref, computed, watch } from 'vue'
 import { usePaginatedBoardgames } from '@/api_services/api_queries'
 import { useAddBoardGameModal } from '@/composables/useAddBoardGameModal'
+import { simulateOffline } from '@/api_services/api_connection_check'
+import { syncQueue } from '@/api_services/api_mutations'
+import { useQueryClient } from '@tanstack/vue-query'
 import BoardGameListItem from '@/components/CatalogueView/BoardGameListItem.vue'
 import AddBoardGameModal from '../BoardGameOpWindows/AddBoardGameModal.vue'
 import ToggleSwitch from 'primevue/toggleswitch'
 import BoardGameCardItem from './BoardGameCardItem.vue'
 
 const { open } = useAddBoardGameModal()
+const queryClient = useQueryClient()
 
 const visibleBoardGamesOnPage = 7
 const visibleBoardGameCardsOnPage = 12
@@ -50,6 +54,12 @@ function showAddModal() {
   open()
 }
 
+function toggleOfflineMode() {
+  simulateOffline.value = !simulateOffline.value
+
+  if (!simulateOffline.value) syncQueue(queryClient)
+}
+
 watch(limit, () => {
   page.value = 0
 })
@@ -64,6 +74,19 @@ watch(totalPages, (newTotal) => {
 <template>
   <div>
     <div class="flex min-h-screen flex-col items-center justify-between p-8">
+      <div class="flex flex-row gap-y-2 pb-3">
+        <button
+          class="rounded-lg px-2 py-0.5 text-xl text-slate-200"
+          :class="[
+            simulateOffline
+              ? 'bg-slate-500 hover:bg-slate-600 active:bg-slate-800'
+              : 'bg-green-500 hover:bg-green-600 active:bg-green-800',
+          ]"
+          @click="toggleOfflineMode"
+        >
+          {{ simulateOffline ? 'Offline' : 'Online' }}
+        </button>
+      </div>
       <div
         v-if="visualViewActive === false"
         class="flex w-11/12 flex-col gap-y-4 overflow-y-scroll"

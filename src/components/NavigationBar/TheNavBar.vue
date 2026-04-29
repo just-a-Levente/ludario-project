@@ -1,15 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { simulateOffline } from '@/api_services/api_connection_check'
 import router from '@/router'
-import { syncQueue } from '@/api_services/api_mutations'
-import { useQueryClient } from '@tanstack/vue-query'
 
 const catalogueButtonActive = ref(true)
 const chartsButtonActive = ref(false)
 const exploreButtonActive = ref(false)
-
-const queryClient = useQueryClient()
 
 function clickCatalogue() {
   catalogueButtonActive.value = true
@@ -24,12 +19,6 @@ function clickCharts() {
   router.push('/dashboard/charts')
 }
 function clickExplore() {}
-
-function toggleOfflineMode() {
-  simulateOffline.value = !simulateOffline.value
-
-  if (!simulateOffline.value) syncQueue(queryClient)
-}
 </script>
 
 <template>
@@ -81,13 +70,6 @@ function toggleOfflineMode() {
           />
         </div>
       </div>
-
-      <button
-        class="rounded-lg bg-slate-500 px-2 py-0.5 text-xl text-slate-200 hover:bg-slate-600 active:bg-slate-800"
-        @click="toggleOfflineMode"
-      >
-        {{ simulateOffline ? 'Simulating offline' : 'Simulate offline' }}
-      </button>
     </div>
   </div>
 </template>
