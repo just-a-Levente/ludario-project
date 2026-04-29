@@ -2,7 +2,9 @@ import type { BoardGame } from '@/data/boardgame'
 import type { PaginatedBoardgamesResponse } from './api_schemas'
 import axios from 'axios'
 
-const api = axios.create({
+// maybe in the future refactor, so that api isn't exposed
+// temporary botch for api_connection_check.ts
+export const api = axios.create({
   baseURL: 'http://localhost:8000',
   headers: {
     'Content-Type': 'application/json',
@@ -34,16 +36,18 @@ export const boardgameApi = {
     return data
   },
 
-  async addBoardgame(boardgameData: Record<string, string>): Promise<void> {
-    await api.post('/api/boardgames', {
+  async addBoardgame(boardgameData: Record<string, string>): Promise<BoardGame> {
+    const { data } = await api.post('/api/boardgames', {
       ...boardgameData,
     })
+    return data
   },
 
-  async updateBoardgame(boardgameData: Record<string, string>): Promise<void> {
-    await api.put(`/api/boardgames`, {
+  async updateBoardgame(boardgameData: Record<string, string>): Promise<BoardGame> {
+    const { data } = await api.put(`/api/boardgames`, {
       ...boardgameData,
     })
+    return data
   },
 
   async deleteBoardgame(boardgameId: number): Promise<void> {
