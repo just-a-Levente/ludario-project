@@ -21,22 +21,13 @@ const offset = computed(() => page.value * limit.value)
 
 const { data, isLoading } = usePaginatedBoardgames(offset, limit)
 
-const pagination = computed(() => {
-  return {
-    items: data.value?.items ?? [],
-    totalItems: data.value?.totalItems ?? 0,
-    limit: limit.value,
-    page: page.value,
-  }
-})
+const items = computed(() => data.value?.items ?? [])
 
 const totalPages = computed(() => {
-  const total = pagination.value.totalItems
-  const lim = pagination.value.limit
+  const total = data.value?.totalItems
+  if (total == null) return 1
 
-  if (isLoading.value) return 1
-
-  return Math.max(1, Math.ceil(total / lim))
+  return Math.max(1, Math.ceil(total / limit.value))
 })
 
 function getStartingPage() {
@@ -77,7 +68,7 @@ watch(totalPages, (newTotal) => {
         v-if="visualViewActive === false"
         class="flex w-11/12 flex-col gap-y-4 overflow-y-scroll"
       >
-        <div class="boardgameListItem" v-for="boardgame in data?.items" :key="boardgame.id">
+        <div class="boardgameListItem" v-for="boardgame in items" :key="boardgame.id">
           <BoardGameListItem :boardgame="boardgame" />
         </div>
       </div>
@@ -85,7 +76,7 @@ watch(totalPages, (newTotal) => {
         v-if="visualViewActive === true"
         class="flex w-11/12 flex-row flex-wrap justify-center gap-5"
       >
-        <div v-for="boardgame in data?.items" :key="boardgame.id">
+        <div v-for="boardgame in items" :key="boardgame.id">
           <BoardGameCardItem :boardgame="boardgame" />
         </div>
       </div>

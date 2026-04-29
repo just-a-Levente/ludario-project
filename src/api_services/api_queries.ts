@@ -17,17 +17,17 @@ export function useBoardgames() {
 
 export function usePaginatedBoardgames(offset: ComputedRef<number>, limit: Ref<number>) {
   return useQuery({
-    queryKey: ['boardgames', offset.value, limit.value],
+    queryKey: computed(() => ['boardgames', offset, limit]),
 
     queryFn: async () => {
       const data = await boardgameApi.getBoardgamesPaginated(offset.value, limit.value)
       return {
-        ...data,
         items: data.items.map(createBoardGame),
+        totalItems: data.total_count,
+        offset: data.offset,
+        limit: data.limit,
       }
     },
-
-    placeholderData: (prev) => prev,
   })
 }
 
