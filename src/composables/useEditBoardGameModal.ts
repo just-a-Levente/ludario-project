@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import { useUpdateBoardgame } from '@/api_services/api_mutations'
 import type { BoardGame } from '@/data/boardgame'
+import { parseBoardgameForm } from '@/utils/boardgame_parser_validator'
 
 const isEditOpen = ref(false)
 
@@ -48,8 +49,17 @@ export function useEditBoardGameModal() {
       tags: taglist.value,
     }
 
+    const { data, errors: validationErrors } = parseBoardgameForm(update_request_fields)
+    if (Object.keys(validationErrors).length > 0) {
+      errors.value = validationErrors
+      return
+    }
+
     updateBoardgame(update_request_fields, {
       onSuccess: () => editClose(),
+      onError: (error: any) => {
+        if (error.message === 'offline') editClose()
+      },
     })
   }
 

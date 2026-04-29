@@ -47,18 +47,26 @@ export function useUpdateBoardgame() {
   const errors = ref<Record<string, string>>({})
 
   const mutation = useMutation({
-    mutationFn: boardgameApi.updateBoardgame,
+    mutationFn: async (updatedGame: any) => {
+      const online = await checkNetworkStatus()
+      if (!online) throw new Error('offline')
+      return boardgameApi.updateBoardgame(updatedGame)
+    },
 
     onMutate: async (updatedGame) => {
-      queryClient.setQueryData(['boardgames'], (old: any[]) =>
-        old?.map((g) => (g.id === updatedGame.id ? updatedGame : g)),
-      )
-
-      const online = await checkNetworkStatus()
-      if (!online) {
-        offlineQueue.value.push({ type: 'update', payload: updatedGame })
-        throw new Error('offline')
-      }
+      const previous = queryClient.getQueriesData({ queryKey: ['boardgames'] })
+      queryClient.setQueriesData({ queryKey: ['boardgames'] }, (old: any) => {
+        if (!old) return old
+        if (old.items)
+          return {
+            ...old,
+            items: old.items.map((g: any) => (g.id === Number(updatedGame.id) ? updatedGame : g)),
+          }
+        if (Array.isArray(old))
+          return old.map((g: any) => (g.id === Number(updatedGame.id) ? updatedGame : g))
+        return old
+      })
+      return { previous }
     },
 
     onSuccess: () => {
@@ -67,9 +75,15 @@ export function useUpdateBoardgame() {
       errors.value = {}
     },
 
-    onError: async (error: any, variables) => {
-      if (error.message === 'offline') return
-      errors.value = error.response?.data?.detail ?? {}
+    onError: async (error: any, variables, context) => {
+      if (error.message === 'offline')
+        offlineQueue.value.push({ type: 'update', payload: variables })
+      else {
+        context?.previous?.forEach(([queryKey, data]: [any, any]) => {
+          queryClient.setQueryData(queryKey, data)
+        })
+        errors.value = error.response?.data?.detail ?? {}
+      }
     },
   })
 
