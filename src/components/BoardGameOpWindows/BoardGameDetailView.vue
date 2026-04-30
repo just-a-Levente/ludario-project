@@ -27,7 +27,7 @@ function goBackToCatalogue() {
         <img
           :src="detailedBoardgame?.thumbnailURL"
           alt="Boardgame thumbnail"
-          class="w-full lg:w-1/3"
+          class="max-h-64 w-2/3 object-contain lg:w-1/2"
         />
         <div class="flex w-full flex-col items-center gap-y-3 lg:w-2/3 lg:items-start lg:gap-y-0">
           <div class="text-2xl font-bold lg:text-3xl">{{ detailedBoardgame?.name }}</div>
