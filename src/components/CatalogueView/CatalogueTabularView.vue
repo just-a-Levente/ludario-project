@@ -6,12 +6,14 @@ import { simulateOffline } from '@/api_services/api_connection_check'
 import { syncQueue } from '@/api_services/api_mutations'
 import { useQueryClient } from '@tanstack/vue-query'
 import { setAddModalPaginationContext } from '@/composables/useAddBoardGameModal'
+import { useFakerService } from '@/api_services/api_faker_service'
 import BoardGameListItem from '@/components/CatalogueView/BoardGameListItem.vue'
 import AddBoardGameModal from '../BoardGameOpWindows/AddBoardGameModal.vue'
 import ToggleSwitch from 'primevue/toggleswitch'
 import BoardGameCardItem from './BoardGameCardItem.vue'
 
 const { open } = useAddBoardGameModal()
+const { isRunning, toggleFaker } = useFakerService()
 const queryClient = useQueryClient()
 
 const visibleBoardGamesOnPage = 7
@@ -79,7 +81,7 @@ watchEffect(() => {
 <template>
   <div>
     <div class="flex min-h-screen flex-col items-center justify-between p-8">
-      <div class="flex flex-row gap-y-2 pb-3">
+      <div class="flex flex-row gap-x-2 pb-3">
         <button
           class="rounded-lg px-2 py-0.5 text-xl text-slate-200"
           :class="[
@@ -90,6 +92,17 @@ watchEffect(() => {
           @click="toggleOfflineMode"
         >
           {{ simulateOffline ? 'Offline' : 'Online' }}
+        </button>
+        <button
+          class="rounded-lg px-2 py-0.5 text-xl text-slate-200"
+          :class="[
+            isRunning
+              ? 'bg-green-500 hover:bg-green-600 active:bg-green-800'
+              : 'bg-slate-500 hover:bg-slate-600 active:bg-slate-800',
+          ]"
+          @click="toggleFaker"
+        >
+          {{ isRunning ? 'Faker On' : 'Faker Off' }}
         </button>
       </div>
       <div

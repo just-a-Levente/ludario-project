@@ -89,10 +89,6 @@ const tagsChartData = computed(() => {
     ],
   }
 })
-
-function startFaker() {}
-
-function stopFaker() {}
 </script>
 
 <template>
@@ -103,17 +99,5 @@ function stopFaker() {}
     <Chart class="h-full w-full" type="bar" :data="producerChartData" :options="chartOptions" />
     <div class="text-2xl md:text-3xl">Top 5 tags by number of copies</div>
     <Chart class="h-full w-full" type="bar" :data="tagsChartData" :options="chartOptions" />
-    <button
-      class="rounded-lg bg-slate-500 px-2 py-0.5 text-2xl text-slate-200 hover:bg-slate-600 active:bg-slate-800"
-      @click="startFaker"
-    >
-      Start Faker
-    </button>
-    <button
-      class="rounded-lg bg-slate-500 px-2 py-0.5 text-2xl text-slate-200 hover:bg-slate-600 active:bg-slate-800"
-      @click="stopFaker"
-    >
-      Stop Faker
-    </button>
   </div>
 </template>
