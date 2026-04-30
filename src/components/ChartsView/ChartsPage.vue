@@ -29,7 +29,10 @@ function producersBoardgameCount(): { name: string; count: number }[] {
     producerMap[game.producer] = (producerMap[game.producer] || 0) + game.numberOfCopies
   })
 
-  return Object.entries(producerMap).map(([name, count]) => ({ name, count }))
+  return Object.entries(producerMap)
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5)
 }
 
 function tagsBoardgameCount(): { name: string; count: number }[] {
@@ -41,7 +44,10 @@ function tagsBoardgameCount(): { name: string; count: number }[] {
     })
   })
 
-  return Object.entries(tagMap).map(([name, count]) => ({ name, count }))
+  return Object.entries(tagMap)
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5)
 }
 
 const producerChartData = computed(() => {
