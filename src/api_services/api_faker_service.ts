@@ -13,6 +13,7 @@ export function useFakerService() {
       const message = JSON.parse(event.data)
       if (message.event === 'boardgame_added') {
         queryClient.invalidateQueries({ queryKey: ['boardgames'] })
+        queryClient.invalidateQueries({ queryKey: ['boardgames-infinite'] })
       }
     }
   }

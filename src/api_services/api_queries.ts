@@ -2,6 +2,7 @@ import { computed } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
 import { boardgameApi } from '@/api_services/api'
 import { createBoardGame } from '@/data/boardgame'
+import { useInfiniteQuery } from '@tanstack/vue-query'
 import type { Ref, ComputedRef } from 'vue'
 
 export function useBoardgames() {
@@ -41,5 +42,24 @@ export function useBoardgame(id: Ref<number>) {
     },
 
     enabled: computed(() => id.value >= 0),
+  })
+}
+
+export function useInfiniteBoardgames(limit: Ref<number>) {
+  return useInfiniteQuery({
+    queryKey: computed(() => ['boardgames-infinite', limit.value]),
+    queryFn: async ({ pageParam = 0 }) => {
+      const data = await boardgameApi.getBoardgamesPaginated(pageParam as number, limit.value)
+      return {
+        items: data.items.map(createBoardGame),
+        totalItems: data.total_count,
+        offset: data.offset,
+        limit: data.limit,
+        nextOffset:
+          data.offset + data.limit < data.total_count ? data.offset + data.limit : undefined,
+      }
+    },
+    getNextPageParam: (lastPage) => lastPage.nextOffset,
+    initialPageParam: 0,
   })
 }

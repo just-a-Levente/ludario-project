@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { ref, computed, watch, watchEffect } from 'vue'
-import { usePaginatedBoardgames } from '@/api_services/api_queries'
-import { useAddBoardGameModal } from '@/composables/useAddBoardGameModal'
+import { ref, computed, watch, watchEffect, onMounted } from 'vue'
+import { useInfiniteBoardgames } from '@/api_services/api_queries'
+import {
+  useAddBoardGameModal,
+  setAddModalPaginationContext,
+} from '@/composables/useAddBoardGameModal'
 import { simulateOffline } from '@/api_services/api_connection_check'
 import { syncQueue } from '@/api_services/api_mutations'
 import { useQueryClient } from '@tanstack/vue-query'
-import { setAddModalPaginationContext } from '@/composables/useAddBoardGameModal'
 import { useFakerService } from '@/api_services/api_faker_service'
 import BoardGameListItem from '@/components/CatalogueView/BoardGameListItem.vue'
 import AddBoardGameModal from '../BoardGameOpWindows/AddBoardGameModal.vue'
@@ -20,38 +22,36 @@ const visibleBoardGamesOnPage = 7
 const visibleBoardGameCardsOnPage = 12
 
 const visualViewActive = ref(false)
-const page = ref(0)
+
 const limit = computed(() =>
   visualViewActive.value ? visibleBoardGameCardsOnPage : visibleBoardGamesOnPage,
 )
-const offset = computed(() => page.value * limit.value)
 
-const { data, isLoading } = usePaginatedBoardgames(offset, limit)
+const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } =
+  useInfiniteBoardgames(limit)
 
-const items = computed(() => data.value?.items ?? [])
+const allItems = computed(() => data.value?.pages.flatMap((page) => page.items) ?? [])
 
-const totalPages = computed(() => {
-  const total = data.value?.totalItems
-  if (total == null) return 1
+const totalItems = computed(() => data.value?.pages[0]?.totalItems ?? 0)
 
-  return Math.max(1, Math.ceil(total / limit.value))
+const sentinel = ref<HTMLElement | null>(null)
+const isSentinelVisible = ref(false)
+
+onMounted(() => {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      isSentinelVisible.value = entries[0].isIntersecting
+      if (entries[0].isIntersecting && hasNextPage.value && !isFetchingNextPage.value) {
+        fetchNextPage()
+      }
+    },
+    { threshold: 0.1, root: sentinel.value?.parentElement },
+  )
+  if (sentinel.value) {
+    console.log('sentinel found:', sentinel.value)
+    observer.observe(sentinel.value)
+  } else console.log('sentinel NOT found')
 })
-
-function getStartingPage() {
-  page.value = 0
-}
-
-function getEndingPage() {
-  page.value = Math.max(totalPages.value - 1, 0)
-}
-
-function getPreviousPage() {
-  if (page.value > 0) page.value--
-}
-
-function getNextPage() {
-  if (page.value < totalPages.value - 1) page.value++
-}
 
 function showAddModal() {
   open()
@@ -63,18 +63,14 @@ function toggleOfflineMode() {
   if (!simulateOffline.value) syncQueue(queryClient)
 }
 
-watch(limit, () => {
-  page.value = 0
-})
-
-watch(totalPages, (newTotal) => {
-  if (page.value >= newTotal) {
-    page.value = Math.max(0, newTotal - 1)
+watch(hasNextPage, (newVal) => {
+  if (newVal && isSentinelVisible.value && !isFetchingNextPage.value) {
+    fetchNextPage()
   }
 })
 
 watchEffect(() => {
-  setAddModalPaginationContext(offset.value, limit.value)
+  setAddModalPaginationContext(0, limit.value)
 })
 </script>
 
@@ -107,20 +103,28 @@ watchEffect(() => {
       </div>
       <div
         v-if="visualViewActive === false"
-        class="flex w-11/12 flex-col gap-y-4 overflow-y-scroll"
+        class="flex h-150 w-11/12 flex-col gap-y-4 overflow-y-scroll"
       >
-        <div class="boardgameListItem" v-for="boardgame in items" :key="boardgame.id">
+        <div class="boardgameListItem" v-for="boardgame in allItems" :key="boardgame.id">
           <BoardGameListItem :boardgame="boardgame" />
         </div>
       </div>
       <div
         v-if="visualViewActive === true"
-        class="flex w-11/12 flex-row flex-wrap justify-center gap-5"
+        class="flex h-150 w-11/12 flex-row flex-wrap justify-center gap-5 overflow-y-scroll"
       >
-        <div v-for="boardgame in items" :key="boardgame.id">
+        <div v-for="boardgame in allItems" :key="boardgame.id">
           <BoardGameCardItem :boardgame="boardgame" />
         </div>
       </div>
+
+      <div ref="sentinel" class="h-4 w-full" />
+
+      <div v-if="isFetchingNextPage" class="py-2 text-center text-slate-400">Loading more...</div>
+      <div v-if="!hasNextPage && allItems.length > 0" class="py-2 text-center text-slate-400">
+        All {{ totalItems }} boardgames loaded
+      </div>
+
       <div class="flex w-11/12 flex-col items-center justify-evenly gap-4 pt-6 lg:flex-row">
         <div>
           <button
@@ -131,34 +135,9 @@ watchEffect(() => {
             + Add boardgame
           </button>
         </div>
-        <div class="flex flex-row gap-x-3 text-xl">
-          <button
-            class="rounded-lg bg-orange-300 px-2 py-0.5 hover:bg-orange-500 active:bg-orange-600"
-            @click="getStartingPage"
-          >
-            &lt;&lt;
-          </button>
-          <button
-            class="rounded-lg bg-orange-300 px-2 py-0.5 hover:bg-orange-500 active:bg-orange-600"
-            @click="getPreviousPage"
-          >
-            &lt;
-          </button>
-          <div v-if="isLoading">Loading</div>
-          <div v-else>{{ page + 1 }} / {{ totalPages }}</div>
-          <button
-            class="rounded-lg bg-orange-300 px-2 py-0.5 hover:bg-orange-500 active:bg-orange-600"
-            @click="getNextPage"
-          >
-            &gt;
-          </button>
-          <button
-            class="rounded-lg bg-orange-300 px-2 py-0.5 hover:bg-orange-500 active:bg-orange-600"
-            @click="getEndingPage"
-          >
-            &gt;&gt;
-          </button>
-        </div>
+
+        <div v-if="isLoading" class="text-slate-400">Loading...</div>
+
         <div class="flex flex-row items-center gap-x-3">
           <div class="primevue-scope">
             <div>Tabular view</div>
