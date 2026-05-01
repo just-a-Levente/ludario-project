@@ -35,6 +35,7 @@ export function useAddBoardgame(offset: Ref<number>, limit: Ref<number>) {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['boardgames'] })
+      queryClient.invalidateQueries({ queryKey: ['boardgames-infinite'] })
       errors.value = {}
     },
 
@@ -81,7 +82,8 @@ export function useUpdateBoardgame() {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['boardgames'] })
-      queryClient.invalidateQueries({ queryKey: ['boardgame'] })
+      queryClient.invalidateQueries({ queryKey: ['boardgames-infinite'] })
+      queryClient.invalidateQueries({ queryKey: ['boardgame'] }) // TODO: make it so that only the updated board game's cache gets invalidated/updated
       errors.value = {}
     },
 
@@ -131,6 +133,8 @@ export function useDeleteBoardgame() {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['boardgames'] })
+      queryClient.invalidateQueries({ queryKey: ['boardgames-infinite'] })
+      // TODO: make it so that the deleted board game's cache gets invalidated
       console.log(offlineQueue.value)
     },
 
