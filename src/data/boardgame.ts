@@ -10,7 +10,6 @@ export type BoardGame = {
   maxNumberOfPlayers: number
   thumbnailURL: string
   tags: string[]
-  stars: number[]
 }
 
 export function createBoardGame(data: Partial<BoardGame> = {}): BoardGame {
@@ -26,7 +25,6 @@ export function createBoardGame(data: Partial<BoardGame> = {}): BoardGame {
     maxNumberOfPlayers: data.maxNumberOfPlayers ?? 1,
     thumbnailURL: data.thumbnailURL ?? '',
     tags: data.tags ?? [],
-    stars: data.stars ?? [],
   }
 }
 
@@ -43,6 +41,5 @@ export function copyBoardGame(data: BoardGame): BoardGame {
     maxNumberOfPlayers: data.maxNumberOfPlayers,
     thumbnailURL: data.thumbnailURL,
     tags: data.tags,
-    stars: data.stars,
   }
 }
