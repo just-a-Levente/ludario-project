@@ -5,7 +5,6 @@ import axios from 'axios'
 // maybe in the future refactor, so that api isn't exposed
 // temporary botch for api_connection_check.ts
 export const api = axios.create({
-  baseURL: 'http://localhost:8000',
   headers: {
     'Content-Type': 'application/json',
   },

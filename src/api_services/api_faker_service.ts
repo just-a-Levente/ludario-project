@@ -8,7 +8,7 @@ export function useFakerService() {
   let socket: WebSocket | null = null
 
   function connect() {
-    socket = new WebSocket('ws://localhost:8000/api/boardgames/faker/ws')
+    socket = new WebSocket(`ws://${window.location.host}/api/boardgames/faker/ws`)
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data)
       if (message.event === 'boardgame_added') {

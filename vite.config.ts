@@ -19,11 +19,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: 'http://192.168.100.1:8000', // main system's IP
-        changeOrigin: true,
-      },
-      '/ws': {
-        target: 'ws://192.168.100.1:8000', // WebSocket proxy
+        target: 'http://192.168.100.2:8000',
         ws: true,
         changeOrigin: true,
       },
