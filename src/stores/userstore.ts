@@ -5,14 +5,14 @@ import type { User } from '@/data/user'
 export const useUserStore = defineStore('users', () => {
   /*   State   */
   const users = ref<User[]>([])
-  let currentUser: User | undefined
+  const currentUser = ref<User | undefined>(undefined)
 
   /*   Getters   */
 
   /*   Functions   */
   function resetUsers() {
     users.value = []
-    currentUser = undefined
+    currentUser.value = undefined
   }
 
   function getUserByEmail(email: string) {
@@ -20,7 +20,7 @@ export const useUserStore = defineStore('users', () => {
   }
 
   function setCurrentUser(currentEmail: string) {
-    currentUser = getUserByEmail(currentEmail)
+    currentUser.value = getUserByEmail(currentEmail)
   }
 
   function addNewUser(newUser: User) {
