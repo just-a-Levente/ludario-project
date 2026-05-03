@@ -14,6 +14,6 @@ export function createReview(data: Partial<Review> = {}): Review {
     author: data.author ?? 'unknown',
     stars: data.stars ?? 0,
     comment: data.comment ?? '',
-    reviewDate: data.reviewDate ?? new Date(2000, 1, 1),
+    reviewDate: data.reviewDate ? new Date(data.reviewDate) : new Date(2000, 1, 1),
   }
 }
