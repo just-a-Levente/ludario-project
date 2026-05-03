@@ -43,5 +43,53 @@ function goBackToCatalogue() {
       </div>
       <div>{{ detailedBoardgame?.description }}</div>
     </div>
+
+    <div class="mt-8 mb-4 text-3xl">Comments</div>
+    <div v-for="review in detailedBoardgame?.reviews" :key="review.id" class="text-sm">
+      <div class="flex flex-col rounded-2xl bg-gray-300 p-5">
+        <div class="mb-6 flex flex-row justify-between">
+          <div class="text-xl">{{ review.author }}</div>
+          <div class="flex h-8 flex-row">
+            <img
+              :src="
+                review.stars >= 1
+                  ? '/src/assets/icons/full_star.png'
+                  : '/src/assets/icons/hollow_star.png'
+              "
+            />
+            <img
+              :src="
+                review.stars >= 2
+                  ? '/src/assets/icons/full_star.png'
+                  : '/src/assets/icons/hollow_star.png'
+              "
+            />
+            <img
+              :src="
+                review.stars >= 3
+                  ? '/src/assets/icons/full_star.png'
+                  : '/src/assets/icons/hollow_star.png'
+              "
+            />
+            <img
+              :src="
+                review.stars >= 4
+                  ? '/src/assets/icons/full_star.png'
+                  : '/src/assets/icons/hollow_star.png'
+              "
+            />
+            <img
+              :src="
+                review.stars >= 5
+                  ? '/src/assets/icons/full_star.png'
+                  : '/src/assets/icons/hollow_star.png'
+              "
+            />
+          </div>
+        </div>
+        <div class="mb-6">{{ review.comment }}</div>
+        <div>{{ review.reviewDate.toLocaleDateString() }}</div>
+      </div>
+    </div>
   </div>
 </template>
