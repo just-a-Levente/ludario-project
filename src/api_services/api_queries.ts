@@ -2,6 +2,7 @@ import { computed } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
 import { boardgameApi } from '@/api_services/api'
 import { createBoardGame } from '@/data/boardgame'
+import { createReview } from '@/data/review'
 import { useInfiniteQuery } from '@tanstack/vue-query'
 import type { Ref, ComputedRef } from 'vue'
 
@@ -38,7 +39,24 @@ export function useBoardgame(id: Ref<number>) {
 
     queryFn: async () => {
       const data = await boardgameApi.getBoardgame(id.value)
-      return createBoardGame(data)
+
+      const parsedReviews: Review[] = []
+      data.reviews.forEach((review) => {
+        const parsedReview = createReview({
+          id: review.id,
+          boardgameId: review.boardgame_id,
+          author: review.author,
+          stars: review.stars,
+          comment: review.comment,
+          reviewDate: review.review_date,
+        })
+        parsedReviews.push(parsedReview)
+      })
+      const parsedData = {
+        ...data,
+        reviews: parsedReviews,
+      }
+      return createBoardGame(parsedData)
     },
 
     enabled: computed(() => id.value >= 0),
