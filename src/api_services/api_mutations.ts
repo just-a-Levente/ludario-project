@@ -145,6 +145,28 @@ export function useDeleteBoardgame() {
   })
 }
 
+export function useAddReview() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (newReview: any) => {
+      console.log(newReview)
+      const online = await checkNetworkStatus()
+      if (!online) throw new Error()
+      return boardgameApi.addReview(newReview)
+    },
+
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['boardgame', variables.boardgame_id] })
+      console.log(`Boardgame #${variables.boardgame_id} was reloaded`)
+    },
+
+    onError: async () => {
+      console.log('REVIEW ADD FAILED')
+    },
+  })
+}
+
 export function useDeleteReview() {
   const queryClient = useQueryClient()
 

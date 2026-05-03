@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useBoardgame } from '@/api_services/api_queries'
+import { useUserStore } from '@/stores/userstore'
+import { useAddReview } from '@/api_services/api_mutations'
 import ReviewItemView from './ReviewItemView.vue'
 
 const route = useRoute()
 const router = useRouter()
+const userStore = useUserStore()
+const { mutate: addReview } = useAddReview()
 
 const id = computed(() => Number(route.params.id))
 
@@ -17,6 +21,30 @@ const tagList = computed(() => {
 
 function goBackToCatalogue() {
   router.push('/dashboard/boardgames')
+}
+
+// -------
+// add new review
+// -------
+
+const numberOfStars = ref(0)
+const comment = ref('')
+
+function sendNewReview() {
+  if (numberOfStars.value == 0 || comment.value == '') return
+
+  const sendingDate = new Date(Date.now())
+
+  const createReviewFields = {
+    boardgame_id: id.value,
+    author: userStore.currentUser?.username,
+    stars: numberOfStars.value,
+    comment: comment.value,
+    review_date: sendingDate.toISOString().slice(0, 10),
+  }
+
+  console.log(createReviewFields)
+  addReview(createReviewFields)
 }
 </script>
 
@@ -43,6 +71,58 @@ function goBackToCatalogue() {
         </div>
       </div>
       <div>{{ detailedBoardgame?.description }}</div>
+    </div>
+
+    <div class="flex flex-col rounded-2xl bg-orange-300 p-5">
+      <div class="flex h-12 flex-row">
+        <img
+          :src="
+            numberOfStars >= 1
+              ? '/src/assets/icons/full_star.png'
+              : '/src/assets/icons/hollow_star.png'
+          "
+          @click="numberOfStars = 1"
+        />
+        <img
+          :src="
+            numberOfStars >= 2
+              ? '/src/assets/icons/full_star.png'
+              : '/src/assets/icons/hollow_star.png'
+          "
+          @click="numberOfStars = 2"
+        />
+        <img
+          :src="
+            numberOfStars >= 3
+              ? '/src/assets/icons/full_star.png'
+              : '/src/assets/icons/hollow_star.png'
+          "
+          @click="numberOfStars = 3"
+        />
+        <img
+          :src="
+            numberOfStars >= 4
+              ? '/src/assets/icons/full_star.png'
+              : '/src/assets/icons/hollow_star.png'
+          "
+          @click="numberOfStars = 4"
+        />
+        <img
+          :src="
+            numberOfStars >= 5
+              ? '/src/assets/icons/full_star.png'
+              : '/src/assets/icons/hollow_star.png'
+          "
+          @click="numberOfStars = 5"
+        />
+      </div>
+      <textarea
+        id="addCommentField"
+        v-model="comment"
+        class="h-16 rounded-lg bg-white p-2"
+        placeholder="Add your review here"
+      />
+      <button @click="sendNewReview">Send</button>
     </div>
 
     <div v-if="detailedBoardgame?.reviews.length > 0" class="mt-8 mb-4 text-3xl">Comments</div>
