@@ -44,7 +44,7 @@ function goBackToCatalogue() {
       <div>{{ detailedBoardgame?.description }}</div>
     </div>
 
-    <div class="mt-8 mb-4 text-3xl">Comments</div>
+    <div v-if="detailedBoardgame?.reviews.length > 0" class="mt-8 mb-4 text-3xl">Comments</div>
     <div v-for="review in detailedBoardgame?.reviews" :key="review.id" class="text-sm">
       <div class="flex flex-col rounded-2xl bg-gray-300 p-5">
         <div class="mb-6 flex flex-row justify-between">
@@ -88,7 +88,10 @@ function goBackToCatalogue() {
           </div>
         </div>
         <div class="mb-6">{{ review.comment }}</div>
-        <div>{{ review.reviewDate.toLocaleDateString() }}</div>
+        <div class="flex flex-row justify-between">
+          <div>{{ review.reviewDate.toLocaleDateString() }}</div>
+          <img class="h-8" src="/src/assets/icons/delete_icon.png" />
+        </div>
       </div>
     </div>
   </div>
