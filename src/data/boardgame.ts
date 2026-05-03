@@ -1,3 +1,5 @@
+import type { Review } from './review'
+
 export type BoardGame = {
   id: number
   hidden: boolean
@@ -10,6 +12,7 @@ export type BoardGame = {
   maxNumberOfPlayers: number
   thumbnailURL: string
   tags: string[]
+  reviews: Review[]
 }
 
 export function createBoardGame(data: Partial<BoardGame> = {}): BoardGame {
@@ -25,6 +28,7 @@ export function createBoardGame(data: Partial<BoardGame> = {}): BoardGame {
     maxNumberOfPlayers: data.maxNumberOfPlayers ?? 1,
     thumbnailURL: data.thumbnailURL ?? '',
     tags: data.tags ?? [],
+    reviews: data.reviews ?? [],
   }
 }
 
@@ -41,5 +45,6 @@ export function copyBoardGame(data: BoardGame): BoardGame {
     maxNumberOfPlayers: data.maxNumberOfPlayers,
     thumbnailURL: data.thumbnailURL,
     tags: data.tags,
+    reviews: data.reviews,
   }
 }
