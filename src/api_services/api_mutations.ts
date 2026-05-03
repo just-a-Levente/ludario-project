@@ -145,6 +145,27 @@ export function useDeleteBoardgame() {
   })
 }
 
+export function useDeleteReview() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({ reviewId, boardgameId }: { reviewId: number; boardgameId: number }) => {
+      const online = await checkNetworkStatus()
+      if (!online) throw new Error()
+      return boardgameApi.deleteReview(reviewId)
+    },
+
+    onSuccess: (data, { boardgameId }) => {
+      queryClient.invalidateQueries({ queryKey: ['boardgame', boardgameId] })
+      console.log(`Boardgame #${boardgameId} was reloaded`)
+    },
+
+    onError: async () => {
+      console.log('REVIEW DELETE FAILED')
+    },
+  })
+}
+
 export async function syncQueue(queryClient: any) {
   for (const op of [...offlineQueue.value]) {
     try {

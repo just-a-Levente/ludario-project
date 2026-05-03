@@ -1,6 +1,7 @@
 import type { BoardGame } from '@/data/boardgame'
 import type { PaginatedBoardgamesResponse } from './api_schemas'
 import axios from 'axios'
+import type { Review } from '@/data/review'
 
 // maybe in the future refactor, so that api isn't exposed
 // temporary botch for api_connection_check.ts
@@ -51,5 +52,20 @@ export const boardgameApi = {
 
   async deleteBoardgame(boardgameId: number): Promise<void> {
     await api.delete('/api/boardgames/' + boardgameId)
+  },
+
+  // ---------
+  // Reviews
+  // ---------
+
+  async addReview(reviewData: Record<string, string>): Promise<Review> {
+    const { data } = await api.post('/api/boardgames/reviews', {
+      ...reviewData,
+    })
+    return data
+  },
+
+  async deleteReview(reviewId: number): Promise<void> {
+    await api.delete('/api/boardgames/reviews/' + reviewId)
   },
 }

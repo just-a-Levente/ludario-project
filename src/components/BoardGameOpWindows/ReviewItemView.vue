@@ -1,9 +1,14 @@
 <script setup lang="ts">
-import { createReview } from '@/data/review'
+import { useDeleteReview } from '@/api_services/api_mutations'
+import type { Review } from '@/data/review'
 
-const props = defineProps({
-  review: createReview,
-})
+const props = defineProps<{ review: Review }>()
+const { mutate: deleteReviewMutation } = useDeleteReview()
+
+function deleteReview() {
+  if (props.review?.id !== undefined)
+    deleteReviewMutation({ reviewId: props.review.id, boardgameId: props.review.boardgameId })
+}
 </script>
 
 <template>
@@ -51,7 +56,7 @@ const props = defineProps({
     <div class="mb-6">{{ props.review?.comment }}</div>
     <div class="flex flex-row justify-between">
       <div>{{ props.review?.reviewDate.toLocaleDateString() }}</div>
-      <img class="h-8" src="/src/assets/icons/delete_icon.png" />
+      <img class="h-8" src="/src/assets/icons/delete_icon.png" @click="deleteReview" />
     </div>
   </div>
 </template>
