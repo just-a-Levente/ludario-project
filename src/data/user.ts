@@ -1,20 +1,15 @@
 export type User = {
   email: string
   username: string
-  passwordhash: string
-  isAdmin: boolean
+  roles: string[]
+  permissions: string[]
 }
 
-export function createUser(
-  newEmail: string,
-  newUsername: string,
-  newPasswordhash: string,
-  adminStatus: boolean,
-): User {
+export function createUser(data: Partial<User> = {}): User {
   return {
-    email: newEmail,
-    username: newUsername,
-    passwordhash: newPasswordhash,
-    isAdmin: adminStatus,
+    email: data.email ?? '',
+    username: data.username ?? '',
+    roles: data.roles ?? [],
+    permissions: data.permissions ?? [],
   }
 }
