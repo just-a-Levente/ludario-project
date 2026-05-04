@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useUserStore } from '@/stores/userstore'
+import { userApi } from '@/api_services/api'
 import router from '@/router'
 
 const userstore = useUserStore()
@@ -28,20 +29,14 @@ const isTransitionActive = ref(false)
 const transitionDuration = 700
 
 async function validateLoginInput() {
-  // TODO implement validating against the user store + error messages + register
   const inputPasswordHash = await hashString(formInputForUser.value.passwordInput)
-  const passwordHash = userstore.getUserByEmail(formInputForUser.value.emailInput)?.passwordhash
-
-  if (passwordHash === inputPasswordHash) {
+  try {
+    const user = await userApi.login(formInputForUser.value.emailInput, inputPasswordHash)
+    userstore.setCurrentUser(user)
     errorStatus.value = false
-    userstore.setCurrentUser(formInputForUser.value.emailInput)
-
     isTransitionActive.value = true
-
-    setTimeout(() => {
-      router.push('/dashboard/boardgames')
-    }, transitionDuration)
-  } else {
+    setTimeout(() => router.push('/dashboard/boardgames'), transitionDuration)
+  } catch {
     errorStatus.value = true
   }
 }
