@@ -69,3 +69,23 @@ export const boardgameApi = {
     await api.delete('/api/boardgames/reviews/' + reviewId)
   },
 }
+
+export const userApi = {
+  async login(email: string, passwordHash: string) {
+    const { data } = await api.post('/api/users/login', {
+      email,
+      password_hash: passwordHash,
+    })
+    return data
+  },
+
+  async register(email: string, username: string, passwordHash: string, isAdmin: boolean) {
+    const { data } = await api.post('/api/users/register', {
+      email,
+      username,
+      password_hash: passwordHash,
+      is_admin: isAdmin,
+    })
+    return data
+  },
+}
