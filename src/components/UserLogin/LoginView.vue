@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { useUserStore } from '@/stores/userstore'
 import { userApi } from '@/api_services/api'
 import router from '@/router'
+import AuthLayout from './AuthLayout.vue'
 
 const userstore = useUserStore()
 
@@ -11,7 +12,13 @@ const formInputForUser = ref({
   passwordInput: '',
 })
 
-async function hashString(inputString: string) {
+// TODO add more error statuses
+const errorStatus = ref(false)
+
+const isTransitionActive = ref(false)
+const transitionDuration = 700
+
+async function hashString(inputString: string): Promise<string> {
   const encoder = new TextEncoder()
   const data = encoder.encode(inputString)
   const hashBuffer = await crypto.subtle.digest('SHA-256', data)
@@ -21,12 +28,6 @@ async function hashString(inputString: string) {
 
   return hashHex
 }
-
-// TODO add more error statuses
-const errorStatus = ref(false)
-
-const isTransitionActive = ref(false)
-const transitionDuration = 700
 
 async function validateLoginInput() {
   const inputPasswordHash = await hashString(formInputForUser.value.passwordInput)
@@ -43,70 +44,48 @@ async function validateLoginInput() {
 </script>
 
 <template>
-  <div class="relative h-dvh">
-    <div class="relative z-20 m-4 flex flex-col items-center justify-center gap-y-3 md:pt-10">
-      <div class="flex flex-col items-center gap-y-5">
-        <div class="">
-          <img src="/src/assets/images/logo_with_title.png" alt="Ludario logo" />
-        </div>
-        <span class="py-3 text-center text-lg font-bold md:text-2xl"
-          >An online board game shop for newcomers and veterans alike</span
-        >
-      </div>
-      <div
-        class="flex flex-col items-center gap-y-6 rounded-xl rounded-br-4xl border-4 border-orange-500 bg-orange-200 p-5"
-      >
-        <div>
-          <span class="text-center text-xl text-orange-600">Log in to your account</span>
-        </div>
-        <div class="flex w-full flex-col gap-y-1.5">
-          <label class="text-orange-600" for="email">E-mail:</label>
-          <input
-            class="rounded-lg bg-white p-2"
-            data-testid="inputEmail"
-            type="text"
-            name="email"
-            v-model="formInputForUser.emailInput"
-          />
-
-          <label class="text-orange-600" for="password">Password:</label>
-          <input
-            class="rounded-lg bg-white p-2"
-            data-testid="inputPassword"
-            type="password"
-            name="password"
-            v-model="formInputForUser.passwordInput"
-          />
-
-          <span v-show="errorStatus" class="text-orange-600"
-            >Invalid email-password combination</span
-          >
-        </div>
-        <div class="flex w-96 flex-row-reverse justify-between rounded-xl">
-          <div class="w-auto">
-            <button
-              @click.prevent="validateLoginInput"
-              data-testid="loginButton"
-              class="rounded-xl rounded-br-3xl bg-orange-600 p-3 text-mauve-200"
-            >
-              Enter
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="fixed bottom-0 z-10 flex w-dvw flex-row">
-      <img src="/src/assets/images/bottom_hexagons_updated.png" class="md:hidden" />
-      <img src="/src/assets/images/bottom_hexagons_full.png" class="hidden md:inline" />
-    </div>
+  <AuthLayout :is-transition-active="isTransitionActive">
     <div
-      class="fixed inset-0 z-50 border-t-8 border-t-orange-600 bg-slate-500 transition-transform duration-700 ease-in-out"
-      :class="isTransitionActive ? 'translate-y-0' : 'translate-y-full'"
-    ></div>
-    <!--
-    <Transition name="card-slide-up">
-      <div v-if="isTransitionActive" class="fixed inset-0 z-50 bg-slate-500"></div>
-    </Transition>
-    -->
-  </div>
+      class="flex flex-col items-center gap-y-6 rounded-xl rounded-br-4xl border-4 border-orange-500 bg-orange-200 p-5"
+    >
+      <div>
+        <span class="text-center text-xl text-orange-600">Log in to your account</span>
+      </div>
+      <div class="flex w-full flex-col gap-y-1.5">
+        <label class="text-orange-600" for="email">E-mail:</label>
+        <input
+          class="rounded-lg bg-white p-2"
+          data-testid="inputEmail"
+          type="text"
+          name="email"
+          v-model="formInputForUser.emailInput"
+        />
+
+        <label class="text-orange-600" for="password">Password:</label>
+        <input
+          class="rounded-lg bg-white p-2"
+          data-testid="inputPassword"
+          type="password"
+          name="password"
+          v-model="formInputForUser.passwordInput"
+        />
+
+        <span v-show="errorStatus" class="text-orange-600">Invalid email-password combination</span>
+      </div>
+      <div class="flex w-96 flex-row-reverse justify-between rounded-xl">
+        <div class="w-auto">
+          <button
+            @click.prevent="validateLoginInput"
+            data-testid="loginButton"
+            class="rounded-xl rounded-br-3xl bg-orange-600 p-3 text-mauve-200"
+          >
+            Enter
+          </button>
+          <RouterLink to="/register" class="self-center text-sm text-orange-600 underline">
+            Create an account
+          </RouterLink>
+        </div>
+      </div>
+    </div>
+  </AuthLayout>
 </template>
