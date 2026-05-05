@@ -19,6 +19,12 @@ function clickCharts() {
   router.push('/dashboard/charts')
 }
 function clickExplore() {}
+function clickChat() {
+  catalogueButtonActive.value = false
+  chartsButtonActive.value = false
+  exploreButtonActive.value = false
+  router.push('/dashboard/chat')
+}
 </script>
 
 <template>
@@ -70,6 +76,20 @@ function clickExplore() {}
           />
         </div>
       </div>
+
+      <div @click="clickChat" class="flex flex-row items-center gap-x-1.5">
+        <span class="p-2 text-lg lg:text-2xl">Chat</span>
+        <!--
+        <div class="w-14 lg:w-18">
+          <img
+            :src="
+              exploreButtonActive === true
+                ? '/src/assets/navbaricons/blue_hexagon_explore.png'
+                : '/src/assets/navbaricons/orange_hexagon_explore.png'
+            "
+          />
+        </div>
+      --></div>
     </div>
   </div>
 </template>

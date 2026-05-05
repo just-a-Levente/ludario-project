@@ -5,6 +5,7 @@ import BoardGameDetailView from '@/components/BoardGameOpWindows/BoardGameDetail
 import { createRouter, createWebHistory } from 'vue-router'
 import ChartsPage from '@/components/ChartsView/ChartsPage.vue'
 import RegisterView from '@/components/UserLogin/RegisterView.vue'
+import ChatView from '@/components/ChatView/ChatView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +39,10 @@ const router = createRouter({
         {
           path: 'charts',
           component: ChartsPage,
+        },
+        {
+          path: 'chat',
+          component: ChatView,
         },
       ],
     },
