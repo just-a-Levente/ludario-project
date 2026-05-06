@@ -46,7 +46,7 @@ const router = createRouter({
           component: ChatPage,
         },
         {
-          path: 'observation',
+          path: 'logs',
           component: ObservationListView,
         },
       ],
