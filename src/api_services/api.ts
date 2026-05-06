@@ -2,6 +2,7 @@ import type { BoardGame } from '@/data/boardgame'
 import type { PaginatedBoardgamesResponse } from './api_schemas'
 import axios from 'axios'
 import type { Review } from '@/data/review'
+import { useUserStore } from '@/stores/userstore'
 
 // maybe in the future refactor, so that api isn't exposed
 // temporary botch for api_connection_check.ts
@@ -9,6 +10,15 @@ export const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+})
+
+api.interceptors.request.use((config) => {
+  const userStore = useUserStore()
+  if (userStore.currentUser) {
+    config.headers['User-Email'] = userStore.currentUser.email
+    config.headers['User-Role'] = userStore.currentUser.roles[0] ?? 'user'
+  }
+  return config
 })
 
 export const boardgameApi = {
