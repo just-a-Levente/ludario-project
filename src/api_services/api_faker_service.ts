@@ -8,7 +8,7 @@ export function useFakerService() {
   let socket: WebSocket | null = null
 
   function connect() {
-    socket = new WebSocket(`ws://${window.location.host}/api/boardgames/faker/ws`)
+    socket = new WebSocket(`ws://${window.location.host}/api/faker/ws`)
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data)
       if (message.event === 'boardgame_added') {
@@ -25,11 +25,11 @@ export function useFakerService() {
 
   async function toggleFaker() {
     if (!isRunning.value) {
-      await api.get('/api/boardgames/faker/start')
+      await api.get('/api/faker/start')
       connect()
       isRunning.value = true
     } else {
-      await api.get('/api/boardgames/faker/stop')
+      await api.get('/api/faker/stop')
       disconnect()
       isRunning.value = false
     }
