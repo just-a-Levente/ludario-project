@@ -7,6 +7,7 @@ import RegisterView from '@/components/UserLogin/RegisterView.vue'
 import ChatPage from '@/components/ChatView/ChatPage.vue'
 import ObservationListView from '@/components/LoggedUsers/ObservationListView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
+import { useUserStore } from '@/stores/userstore'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -52,6 +53,12 @@ const router = createRouter({
       ],
     },
   ],
+})
+
+router.beforeEach((to) => {
+  if (to.name === 'login') {
+    useUserStore().clearCurrentUser()
+  }
 })
 
 export default router

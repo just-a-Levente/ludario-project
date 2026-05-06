@@ -34,6 +34,10 @@ function clickLogs() {
   exploreButtonActive.value = false
   router.push('/dashboard/logs')
 }
+function clickLogout() {
+  userStore.clearCurrentUser()
+  router.push('/login')
+}
 </script>
 
 <template>
@@ -117,6 +121,21 @@ function clickLogs() {
           />
         </div>
       --></div>
+    </div>
+
+    <div @click="clickLogout" class="flex flex-row items-center gap-x-1.5">
+      <span class="p-2 text-lg lg:text-2xl">Logout</span>
+      <!--
+        <div class="w-14 lg:w-18">
+          <img
+            :src="
+              exploreButtonActive === true
+                ? '/src/assets/navbaricons/blue_hexagon_explore.png'
+                : '/src/assets/navbaricons/orange_hexagon_explore.png'
+            "
+          />
+        </div>
+      -->
     </div>
   </div>
 </template>
