@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import router from '@/router'
+import { useUserStore } from '@/stores/userstore'
+
+const userStore = useUserStore()
 
 const catalogueButtonActive = ref(true)
 const chartsButtonActive = ref(false)
@@ -97,7 +100,11 @@ function clickLogs() {
         </div>
       --></div>
 
-      <div @click="clickLogs" class="flex flex-row items-center gap-x-1.5">
+      <div
+        v-if="userStore.isAdmin()"
+        @click="clickLogs"
+        class="flex flex-row items-center gap-x-1.5"
+      >
         <span class="p-2 text-lg lg:text-2xl">Logs</span>
         <!--
         <div class="w-14 lg:w-18">
