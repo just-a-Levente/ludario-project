@@ -2,10 +2,11 @@ import CatalogueTabularView from '@/components/CatalogueView/CatalogueTabularVie
 import DashboardView from '@/components/NavigationBar/DashboardView.vue'
 import LoginView from '@/components/UserLogin/LoginView.vue'
 import BoardGameDetailView from '@/components/BoardGameOpWindows/BoardGameDetailView.vue'
-import { createRouter, createWebHistory } from 'vue-router'
 import ChartsPage from '@/components/ChartsView/ChartsPage.vue'
 import RegisterView from '@/components/UserLogin/RegisterView.vue'
-import ChatView from '@/components/ChatView/ChatView.vue'
+import ChatPage from '@/components/ChatView/ChatPage.vue'
+import ObservationListView from '@/components/LoggedUsers/ObservationListView.vue'
+import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -42,7 +43,11 @@ const router = createRouter({
         },
         {
           path: 'chat',
-          component: ChatView,
+          component: ChatPage,
+        },
+        {
+          path: 'observation',
+          component: ObservationListView,
         },
       ],
     },
