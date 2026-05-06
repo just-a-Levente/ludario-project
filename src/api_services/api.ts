@@ -59,14 +59,14 @@ export const boardgameApi = {
   // ---------
 
   async addReview(reviewData: Record<string, string>): Promise<Review> {
-    const { data } = await api.post('/api/boardgames/reviews', {
+    const { data } = await api.post('/api/reviews', {
       ...reviewData,
     })
     return data
   },
 
   async deleteReview(reviewId: number): Promise<void> {
-    await api.delete('/api/boardgames/reviews/' + reviewId)
+    await api.delete('/api/reviews/' + reviewId)
   },
 }
 
