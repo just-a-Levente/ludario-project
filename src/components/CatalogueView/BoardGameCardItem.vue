@@ -6,6 +6,7 @@ import EditBoardGameModal from '../BoardGameOpWindows/EditBoardGameModal.vue'
 import { useDeleteBoardGameModal } from '@/composables/useDeleteBoardGameModal'
 import { useEditBoardGameModal } from '@/composables/useEditBoardGameModal'
 import { useCookieManager } from '@/composables/useCookieManager'
+import { useUserStore } from '@/stores/userstore'
 
 const props = defineProps({
   boardgame: createBoardGame,
@@ -15,6 +16,7 @@ const { deleteOpen, changeBoardgameToBeDeleted } = useDeleteBoardGameModal()
 const { editOpen, changeBoardGameToBeEdited } = useEditBoardGameModal()
 const router = useRouter()
 const cookieManager = useCookieManager()
+const userStore = useUserStore()
 
 function openDetailModal() {
   if (props.boardgame === undefined) return
@@ -62,10 +64,10 @@ function openEditModal() {
       <button @click="openDetailModal">
         <img src="/src/assets/icons/details_icon.png" alt="Details" class="w-10" />
       </button>
-      <button @click="openEditModal">
+      <button v-if="userStore.isAdmin()" @click="openEditModal">
         <img src="/src/assets/icons/edit_icon.png" alt="Edit" class="w-10" />
       </button>
-      <button @click="openDeleteModal">
+      <button v-if="userStore.isAdmin()" @click="openDeleteModal">
         <img src="/src/assets/icons/delete_icon.png" alt="Delete" class="w-10" />
       </button>
     </div>

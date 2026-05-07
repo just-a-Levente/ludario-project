@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { useDeleteReview } from '@/api_services/api_mutations'
 import type { Review } from '@/data/review'
+import { useUserStore } from '@/stores/userstore'
+
+const userStore = useUserStore()
 
 const props = defineProps<{ review: Review }>()
 const { mutate: deleteReviewMutation } = useDeleteReview()
@@ -56,7 +59,12 @@ function deleteReview() {
     <div class="mb-6">{{ props.review?.comment }}</div>
     <div class="flex flex-row justify-between">
       <div>{{ props.review?.reviewDate.toLocaleDateString() }}</div>
-      <img class="h-8" src="/src/assets/icons/delete_icon.png" @click="deleteReview" />
+      <img
+        v-if="userStore.isAdmin()"
+        class="h-8"
+        src="/src/assets/icons/delete_icon.png"
+        @click="deleteReview"
+      />
     </div>
   </div>
 </template>

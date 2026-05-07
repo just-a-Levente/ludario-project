@@ -64,7 +64,11 @@ function clickLogout() {
         </div>
       </div>
 
-      <div @click="clickCharts" class="flex flex-row items-center gap-x-1.5">
+      <div
+        v-if="userStore.isAdmin()"
+        @click="clickCharts"
+        class="flex flex-row items-center gap-x-1.5"
+      >
         <span class="p-2 text-lg lg:text-2xl">Charts</span>
         <div class="w-14 lg:w-18">
           <img

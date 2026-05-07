@@ -13,10 +13,12 @@ import BoardGameListItem from '@/components/CatalogueView/BoardGameListItem.vue'
 import AddBoardGameModal from '../BoardGameOpWindows/AddBoardGameModal.vue'
 import ToggleSwitch from 'primevue/toggleswitch'
 import BoardGameCardItem from './BoardGameCardItem.vue'
+import { useUserStore } from '@/stores/userstore'
 
 const { open } = useAddBoardGameModal()
 const { isRunning, toggleFaker } = useFakerService()
 const queryClient = useQueryClient()
+const userStore = useUserStore()
 
 const visibleBoardGamesOnPage = 7
 const visibleBoardGameCardsOnPage = 12
@@ -77,7 +79,7 @@ watchEffect(() => {
 <template>
   <div>
     <div class="flex min-h-screen flex-col items-center justify-between p-8">
-      <div class="flex flex-row gap-x-2 pb-3">
+      <div v-if="userStore.isAdmin()" class="flex flex-row gap-x-2 pb-3">
         <button
           class="rounded-lg px-2 py-0.5 text-xl text-slate-200"
           :class="[
@@ -128,6 +130,7 @@ watchEffect(() => {
       <div class="flex w-11/12 flex-col items-center justify-evenly gap-4 pt-6 lg:flex-row">
         <div>
           <button
+            v-if="userStore.isAdmin()"
             id="addButton"
             class="rounded-lg bg-slate-500 px-2 py-0.5 text-xl text-slate-200 hover:bg-slate-600 active:bg-slate-800"
             @click="showAddModal"

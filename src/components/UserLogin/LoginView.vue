@@ -41,6 +41,10 @@ async function validateLoginInput() {
     errorStatus.value = true
   }
 }
+
+function goToRegister() {
+  router.push('/register')
+}
 </script>
 
 <template>
@@ -72,19 +76,17 @@ async function validateLoginInput() {
 
         <span v-show="errorStatus" class="text-orange-600">Invalid email-password combination</span>
       </div>
-      <div class="flex w-96 flex-row-reverse justify-between rounded-xl">
-        <div class="w-auto">
-          <button
-            @click.prevent="validateLoginInput"
-            data-testid="loginButton"
-            class="rounded-xl rounded-br-3xl bg-orange-600 p-3 text-mauve-200"
-          >
-            Enter
-          </button>
-          <RouterLink to="/register" class="self-center text-sm text-orange-600 underline">
-            Create an account
-          </RouterLink>
-        </div>
+      <div class="flex w-96 flex-row justify-between rounded-xl">
+        <span @click="goToRegister" class="self-center text-sm text-orange-600 underline">
+          Create an account
+        </span>
+        <button
+          @click.prevent="validateLoginInput"
+          data-testid="loginButton"
+          class="rounded-xl rounded-br-3xl bg-orange-600 p-3 text-mauve-200"
+        >
+          Enter
+        </button>
       </div>
     </div>
   </AuthLayout>
