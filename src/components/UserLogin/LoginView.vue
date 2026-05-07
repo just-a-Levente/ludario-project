@@ -4,6 +4,7 @@ import { useUserStore } from '@/stores/userstore'
 import { userApi } from '@/api_services/api'
 import router from '@/router'
 import AuthLayout from './AuthLayout.vue'
+import { sha256 } from 'js-sha256'
 
 const userstore = useUserStore()
 
@@ -18,19 +19,12 @@ const errorStatus = ref(false)
 const isTransitionActive = ref(false)
 const transitionDuration = 700
 
-async function hashString(inputString: string): Promise<string> {
-  const encoder = new TextEncoder()
-  const data = encoder.encode(inputString)
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data)
-
-  const hashArray = Array.from(new Uint8Array(hashBuffer))
-  const hashHex = hashArray.map((byte) => byte.toString(16).padStart(2, '0')).join('')
-
-  return hashHex
+function hashString(inputString: string): string {
+  return sha256(inputString)
 }
 
 async function validateLoginInput() {
-  const inputPasswordHash = await hashString(formInputForUser.value.passwordInput)
+  const inputPasswordHash = hashString(formInputForUser.value.passwordInput)
   try {
     const user = await userApi.login(formInputForUser.value.emailInput, inputPasswordHash)
     userstore.setCurrentUser(user)

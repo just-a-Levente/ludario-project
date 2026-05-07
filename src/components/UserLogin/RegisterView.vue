@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { userApi } from '@/api_services/api'
 import AuthLayout from './AuthLayout.vue'
+import { sha256 } from 'js-sha256'
 
 const router = useRouter()
 
@@ -11,12 +12,8 @@ const errors = ref<Record<string, string>>({})
 const isTransitionActive = ref(false)
 const transitionDuration = 700
 
-async function hashString(input: string): Promise<string> {
-  const encoder = new TextEncoder()
-  const hashBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(input))
-  return Array.from(new Uint8Array(hashBuffer))
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('')
+function hashString(inputString: string): string {
+  return sha256(inputString)
 }
 
 function validate(): boolean {
@@ -31,7 +28,7 @@ function validate(): boolean {
 
 async function register() {
   if (!validate()) return
-  const passwordHash = await hashString(form.value.password)
+  const passwordHash = hashString(form.value.password)
   try {
     await userApi.register(form.value.email, form.value.username, passwordHash, false)
     isTransitionActive.value = true
