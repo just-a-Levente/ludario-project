@@ -44,7 +44,7 @@ function goToRegister() {
 <template>
   <AuthLayout :is-transition-active="isTransitionActive">
     <div
-      class="flex flex-col items-center gap-y-6 rounded-xl rounded-br-4xl border-4 border-orange-500 bg-orange-200 p-5"
+      class="flex min-w-24 flex-col items-center gap-y-6 rounded-xl rounded-br-4xl border-4 border-orange-500 bg-orange-200 p-5"
     >
       <div>
         <span class="text-center text-xl text-orange-600">Log in to your account</span>

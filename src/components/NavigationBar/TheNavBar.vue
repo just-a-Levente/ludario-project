@@ -50,7 +50,7 @@ function clickLogout() {
       class="w-40 sm:w-48 lg:w-56 lg:pb-6"
     />
 
-    <div class="flex flex-col items-end sm:flex-row lg:flex-col lg:items-end">
+    <div class="flex flex-row flex-wrap items-end sm:flex-row lg:flex-col lg:items-end">
       <div @click="clickCatalogue" class="flex flex-row items-center gap-x-1.5">
         <span class="p-2 text-lg lg:text-2xl">Catalogue</span>
         <div class="w-14 lg:w-18">
