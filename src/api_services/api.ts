@@ -7,9 +7,11 @@ import { useUserStore } from '@/stores/userstore'
 // maybe in the future refactor, so that api isn't exposed
 // temporary botch for api_connection_check.ts
 export const api = axios.create({
+  baseURL: '/',
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 })
 
 api.interceptors.request.use((config) => {
