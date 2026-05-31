@@ -18,10 +18,10 @@ export default defineConfig({
   },
   server: {
     host: '0.0.0.0', // listen on all interfaces, not just localhost
-    port: 8080,
+    port: 8008,
     proxy: {
       '/api': {
-        target: 'https://192.168.100.2:8000',
+        target: 'https://172.30.240.175:8000',
         changeOrigin: true,
         secure: false, // allows the self-signed cert server-side
       },

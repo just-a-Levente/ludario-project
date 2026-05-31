@@ -1,5 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import { userApi } from '@/api_services/api'
+import router from '@/router'
 import type { User } from '@/data/user'
 
 export const useUserStore = defineStore('users', () => {
@@ -13,6 +15,14 @@ export const useUserStore = defineStore('users', () => {
     currentUser.value = undefined
   }
 
+  async function logout() {
+    try {
+      await userApi.logout() // tells server to delete refresh token + clear cookies
+    } finally {
+      clearCurrentUser()
+    }
+  }
+
   function hasPermission(permission: string): boolean {
     return currentUser.value?.permissions.includes(permission) ?? false
   }
@@ -21,5 +31,5 @@ export const useUserStore = defineStore('users', () => {
     return currentUser.value?.roles.includes('admin') ?? false
   }
 
-  return { currentUser, setCurrentUser, clearCurrentUser, hasPermission, isAdmin }
+  return { currentUser, setCurrentUser, clearCurrentUser, logout, hasPermission, isAdmin }
 })

@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import router from '@/router'
 import { useUserStore } from '@/stores/userstore'
+import { userApi } from '@/api_services/api'
 
 const userStore = useUserStore()
 
@@ -35,7 +36,7 @@ function clickLogs() {
   router.push('/dashboard/logs')
 }
 function clickLogout() {
-  userStore.clearCurrentUser()
+  userApi.logout()
   router.push('/login')
 }
 </script>

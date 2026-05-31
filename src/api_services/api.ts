@@ -14,14 +14,33 @@ export const api = axios.create({
   withCredentials: true,
 })
 
-api.interceptors.request.use((config) => {
-  const userStore = useUserStore()
-  if (userStore.currentUser) {
-    config.headers['User-Email'] = userStore.currentUser.email
-    config.headers['User-Role'] = userStore.currentUser.roles[0] ?? 'user'
-  }
-  return config
-})
+let isRefreshing = false
+
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const original = error.config
+    const userStore = useUserStore()
+
+    if (original.url === '/api/users/refresh') return Promise.reject(error)
+
+    if (error.response?.status === 401 && !original._retry) {
+      if (isRefreshing) return Promise.reject(error)
+      original._retry = true
+      isRefreshing = true
+      try {
+        await api.post('/api/users/refresh')
+        isRefreshing = false
+        return api(original) // retry the original request
+      } catch {
+        isRefreshing = false
+        await userStore.logout() // clear local state, redirect to login
+        return Promise.reject(error)
+      }
+    }
+    return Promise.reject(error)
+  },
+)
 
 export const boardgameApi = {
   async getAllBoardgames(): Promise<BoardGame[]> {
@@ -99,5 +118,9 @@ export const userApi = {
       is_admin: isAdmin,
     })
     return data
+  },
+
+  async logout() {
+    await api.post('/api/users/logout')
   },
 }
