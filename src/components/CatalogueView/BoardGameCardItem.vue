@@ -8,6 +8,10 @@ import { useEditBoardGameModal } from '@/composables/useEditBoardGameModal'
 import { useCookieManager } from '@/composables/useCookieManager'
 import { useUserStore } from '@/stores/userstore'
 
+const detailsUrl = '/details_icon.png?url'
+const editUrl = '/edit_icon.png?url'
+const deleteUrl = '/delete_icon.png?url'
+
 const props = defineProps({
   boardgame: createBoardGame,
 })
@@ -62,13 +66,13 @@ function openEditModal() {
 
     <div class="flex shrink-0 flex-row items-center gap-x-2">
       <button @click="openDetailModal">
-        <img src="/src/assets/icons/details_icon.png" alt="Details" class="w-10" />
+        <img :src="detailsUrl" alt="Details" class="w-10" />
       </button>
       <button v-if="userStore.isAdmin()" @click="openEditModal">
-        <img src="/src/assets/icons/edit_icon.png" alt="Edit" class="w-10" />
+        <img :src="editUrl" class="w-10" />
       </button>
       <button v-if="userStore.isAdmin()" @click="openDeleteModal">
-        <img src="/src/assets/icons/delete_icon.png" alt="Delete" class="w-10" />
+        <img :src="deleteUrl" class="w-10" />
       </button>
     </div>
 

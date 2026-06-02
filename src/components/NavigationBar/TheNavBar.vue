@@ -4,6 +4,13 @@ import router from '@/router'
 import { useUserStore } from '@/stores/userstore'
 import { userApi } from '@/api_services/api'
 
+import blueBookUrl from '../../assets/navbaricons/blue_hexagon_book.png'
+import orangeBookUrl from '../../assets/navbaricons/orange_hexagon_book.png'
+import bluePieChartUrl from '../../assets/navbaricons/blue_hexagon_pie_chart.png'
+import orangePieChartUrl from '../../assets/navbaricons/orange_hexagon_pie_chart.png'
+import blueExploreUrl from '../../assets/navbaricons/blue_hexagon_explore.png'
+import orangeExploreUrl from '../../assets/navbaricons/orange_hexagon_explore.png'
+
 const userStore = useUserStore()
 
 const catalogueButtonActive = ref(true)
@@ -55,13 +62,7 @@ function clickLogout() {
       <div @click="clickCatalogue" class="flex flex-row items-center gap-x-1.5">
         <span class="p-2 text-lg lg:text-2xl">Catalogue</span>
         <div class="w-14 lg:w-18">
-          <img
-            :src="
-              catalogueButtonActive === true
-                ? '/src/assets/navbaricons/blue_hexagon_book.png'
-                : '/src/assets/navbaricons/orange_hexagon_book.png'
-            "
-          />
+          <img :src="catalogueButtonActive === true ? blueBookUrl : orangeBookUrl" />
         </div>
       </div>
 
@@ -72,26 +73,14 @@ function clickLogout() {
       >
         <span class="p-2 text-lg lg:text-2xl">Charts</span>
         <div class="w-14 lg:w-18">
-          <img
-            :src="
-              chartsButtonActive === true
-                ? '/src/assets/navbaricons/blue_hexagon_pie_chart.png'
-                : '/src/assets/navbaricons/orange_hexagon_pie_chart.png'
-            "
-          />
+          <img :src="chartsButtonActive === true ? bluePieChartUrl : orangePieChartUrl" />
         </div>
       </div>
 
       <div @click="clickExplore" class="flex flex-row items-center gap-x-1.5">
         <span class="p-2 text-lg lg:text-2xl">Explore</span>
         <div class="w-14 lg:w-18">
-          <img
-            :src="
-              exploreButtonActive === true
-                ? '/src/assets/navbaricons/blue_hexagon_explore.png'
-                : '/src/assets/navbaricons/orange_hexagon_explore.png'
-            "
-          />
+          <img :src="exploreButtonActive === true ? blueExploreUrl : orangeExploreUrl" />
         </div>
       </div>
 

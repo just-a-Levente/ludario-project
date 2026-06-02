@@ -6,6 +6,9 @@ import { useUserStore } from '@/stores/userstore'
 import { useAddReview } from '@/api_services/api_mutations'
 import ReviewItemView from './ReviewItemView.vue'
 
+const fullStarUrl = '/full_star.png?url'
+const hollowStarUrl = '/hollow_star.png?url'
+
 const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
@@ -75,46 +78,11 @@ function sendNewReview() {
 
     <div class="flex flex-col rounded-2xl bg-orange-300 p-5">
       <div class="flex h-12 flex-row">
-        <img
-          :src="
-            numberOfStars >= 1
-              ? '/src/assets/icons/full_star.png'
-              : '/src/assets/icons/hollow_star.png'
-          "
-          @click="numberOfStars = 1"
-        />
-        <img
-          :src="
-            numberOfStars >= 2
-              ? '/src/assets/icons/full_star.png'
-              : '/src/assets/icons/hollow_star.png'
-          "
-          @click="numberOfStars = 2"
-        />
-        <img
-          :src="
-            numberOfStars >= 3
-              ? '/src/assets/icons/full_star.png'
-              : '/src/assets/icons/hollow_star.png'
-          "
-          @click="numberOfStars = 3"
-        />
-        <img
-          :src="
-            numberOfStars >= 4
-              ? '/src/assets/icons/full_star.png'
-              : '/src/assets/icons/hollow_star.png'
-          "
-          @click="numberOfStars = 4"
-        />
-        <img
-          :src="
-            numberOfStars >= 5
-              ? '/src/assets/icons/full_star.png'
-              : '/src/assets/icons/hollow_star.png'
-          "
-          @click="numberOfStars = 5"
-        />
+        <img :src="numberOfStars >= 1 ? fullStarUrl : hollowStarUrl" @click="numberOfStars = 1" />
+        <img :src="numberOfStars >= 2 ? fullStarUrl : hollowStarUrl" @click="numberOfStars = 2" />
+        <img :src="numberOfStars >= 3 ? fullStarUrl : hollowStarUrl" @click="numberOfStars = 3" />
+        <img :src="numberOfStars >= 4 ? fullStarUrl : hollowStarUrl" @click="numberOfStars = 4" />
+        <img :src="numberOfStars >= 5 ? fullStarUrl : hollowStarUrl" @click="numberOfStars = 5" />
       </div>
       <textarea
         id="addCommentField"
