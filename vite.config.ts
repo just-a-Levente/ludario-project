@@ -21,9 +21,15 @@ export default defineConfig({
     port: 8008,
     proxy: {
       '/api': {
-        target: 'https://172.30.240.175:8000',
+        target: 'https://ludario-project-backend.onrender.com/',
         changeOrigin: true,
         secure: false, // allows the self-signed cert server-side
+      },
+      '/ws': {
+        target: 'wss://ludario-project-backend.onrender.com/', // WebSocket proxy
+        ws: true,
+        changeOrigin: true,
+        secure: false,
       },
     },
     https: {

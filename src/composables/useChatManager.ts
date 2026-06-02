@@ -19,7 +19,7 @@ export function useChatManager() {
     const email = userStore.currentUser?.email
     if (!email) return
 
-    const wsUrl = `ws://${window.location.host}/api/chat/ws/${email}`
+    const wsUrl = `wss://${window.location.host}/api/chat/ws/${email}`
     socket = new WebSocket(wsUrl)
 
     socket.onopen = () => {
