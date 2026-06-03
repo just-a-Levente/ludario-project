@@ -23,13 +23,13 @@ export default defineConfig({
       '/api': {
         target: 'https://ludario-project-backend.onrender.com:8000/',
         changeOrigin: true,
-        secure: false, // allows the self-signed cert server-side
+        //secure: false, // allows the self-signed cert server-side
       },
       '/ws': {
         target: 'wss://ludario-project-backend.onrender.com:8000/', // WebSocket proxy
         ws: true,
         changeOrigin: true,
-        secure: false,
+        //secure: false,
       },
     },
     https: {

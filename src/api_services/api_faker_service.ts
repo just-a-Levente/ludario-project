@@ -8,7 +8,7 @@ export function useFakerService() {
   let socket: WebSocket | null = null
 
   function connect() {
-    socket = new WebSocket(`ws://${window.location.host}/api/faker/ws`)
+    socket = new WebSocket(`wss://ludario-project-backend.onrender.com/ws/faker`)
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data)
       if (message.event === 'boardgame_added') {
