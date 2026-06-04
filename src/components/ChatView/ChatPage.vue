@@ -72,7 +72,7 @@ function isOwnMessage(sender: string): boolean {
             · {{ formatTime(message.timestamp) }}
           </span>
           <div
-            class="max-w-xs rounded-2xl px-4 py-2 text-sm"
+            class="max-w-1/3 rounded-2xl px-4 py-2 text-sm wrap-break-word"
             :class="
               isOwnMessage(message.sender)
                 ? 'rounded-tr-none bg-orange-400 text-white'
